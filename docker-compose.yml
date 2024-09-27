@@ -1,0 +1,29 @@
+services:
+
+  php:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: symfony server:start --no-tls
+    ports:
+      - 8000:8000
+    depends_on:
+      - database
+    volumes:
+      - .:/app
+
+  database:
+    image: postgres
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_DB: test
+      POSTGRES_USER: test
+      POSTGRES_PASSWORD: test
+
+  adminer:
+    image: adminer
+    ports:
+      - 8080:8080
+    depends_on:
+      - database

@@ -48,6 +48,8 @@ version:
 
 prettier:
 	docker run -v ${PWD}:/code ghcr.io/php-cs-fixer/php-cs-fixer:3.48-php8.2 fix -- ./src
+	docker run -v ${PWD}:/code ghcr.io/php-cs-fixer/php-cs-fixer:3.48-php8.2 fix -- ./templates
+
 
 ps:
 	$(DOCKER_COMPOSE) ps

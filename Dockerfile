@@ -28,8 +28,8 @@ RUN wget https://get.symfony.com/cli/installer -O - | bash && mv /root/.symfony5
 COPY composer.json composer.lock symfony.lock ./
 
 RUN set -eux; \
-	composer install --prefer-dist --no-scripts --no-progress --no-suggest; \
-	composer clear-cache
+ composer install --prefer-dist --no-scripts --no-progress --no-suggest; \
+ composer clear-cache
 
 COPY ./ ./
 
@@ -38,4 +38,3 @@ RUN bin/console cache:warmup
 EXPOSE 8000
 
 CMD ["php-fpm"]
-

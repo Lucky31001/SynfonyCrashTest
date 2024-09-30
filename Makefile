@@ -51,3 +51,6 @@ prettier:
 
 ps:
 	$(DOCKER_COMPOSE) ps
+
+restart:
+	$(DOCKER_COMPOSE) restart

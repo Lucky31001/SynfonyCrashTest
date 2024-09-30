@@ -18,6 +18,10 @@ class Article
     #[ORM\CustomIdGenerator(class: UuidGenerator::class)]
     private ?Uuid $id = null;
 
+    #[ORM\ManyToOne(targetEntity: Category::class, cascade: ['persist'])]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Category $category;
+
     #[ORM\Column(type: 'string', length: 255)]
     private string $title;
 
@@ -35,4 +39,70 @@ class Article
 
     #[ORM\Column(type: 'integer')]
     private int $tva;
+
+    public function getTva(): int
+    {
+        return $this->tva;
+    }
+
+    public function setTva(int $tva): void
+    {
+        $this->tva = $tva;
+    }
+
+    public function getPrice(): int
+    {
+        return $this->price;
+    }
+
+    public function setPrice(int $price): void
+    {
+        $this->price = $price;
+    }
+
+    public function getFav(): int
+    {
+        return $this->fav;
+    }
+
+    public function setFav(int $fav): void
+    {
+        $this->fav = $fav;
+    }
+
+    public function getImage(): string
+    {
+        return $this->image;
+    }
+
+    public function setImage(string $image): void
+    {
+        $this->image = $image;
+    }
+
+    public function getContent(): string
+    {
+        return $this->content;
+    }
+
+    public function setContent(string $content): void
+    {
+        $this->content = $content;
+    }
+
+    public function getTitle(): string
+    {
+        return $this->title;
+    }
+
+    public function setTitle(string $title): void
+    {
+        $this->title = $title;
+    }
+
+    public function getId(): ?Uuid
+    {
+        return $this->id;
+    }
+
 }

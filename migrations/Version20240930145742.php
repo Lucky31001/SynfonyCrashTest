@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20240930112102 extends AbstractMigration
+final class Version20240930145742 extends AbstractMigration
 {
     public function getDescription(): string
     {
@@ -20,8 +20,11 @@ final class Version20240930112102 extends AbstractMigration
     public function up(Schema $schema): void
     {
         // this up() migration is auto-generated, please modify it to your needs
-        $this->addSql('CREATE TABLE article (id UUID NOT NULL, title VARCHAR(255) NOT NULL, content VARCHAR(255) DEFAULT NULL, image VARCHAR(255) DEFAULT NULL, fav INT DEFAULT 0 NOT NULL, price INT NOT NULL, tva INT NOT NULL, PRIMARY KEY(id))');
-        $this->addSql('COMMENT ON COLUMN article.id IS \'(DC2Type:uuid)\'');
+        $this->addSql('CREATE SEQUENCE article_id_seq INCREMENT BY 1 MINVALUE 1 START 1');
+        $this->addSql('CREATE SEQUENCE category_id_seq INCREMENT BY 1 MINVALUE 1 START 1');
+        $this->addSql('CREATE TABLE article (id INT NOT NULL, title VARCHAR(255) NOT NULL, content VARCHAR(255) DEFAULT NULL, image VARCHAR(255) DEFAULT NULL, fav INT DEFAULT 0 NOT NULL, price INT NOT NULL, tva INT NOT NULL, PRIMARY KEY(id))');
+        $this->addSql('CREATE TABLE category (id INT NOT NULL, article_id INT DEFAULT NULL, name VARCHAR(255) NOT NULL, PRIMARY KEY(id))');
+        $this->addSql('CREATE INDEX IDX_64C19C17294869C ON category (article_id)');
         $this->addSql('CREATE TABLE messenger_messages (id BIGSERIAL NOT NULL, body TEXT NOT NULL, headers TEXT NOT NULL, queue_name VARCHAR(190) NOT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, available_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, delivered_at TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, PRIMARY KEY(id))');
         $this->addSql('CREATE INDEX IDX_75EA56E0FB7336F0 ON messenger_messages (queue_name)');
         $this->addSql('CREATE INDEX IDX_75EA56E0E3BD61CE ON messenger_messages (available_at)');
@@ -37,13 +40,18 @@ final class Version20240930112102 extends AbstractMigration
         $$ LANGUAGE plpgsql;');
         $this->addSql('DROP TRIGGER IF EXISTS notify_trigger ON messenger_messages;');
         $this->addSql('CREATE TRIGGER notify_trigger AFTER INSERT OR UPDATE ON messenger_messages FOR EACH ROW EXECUTE PROCEDURE notify_messenger_messages();');
+        $this->addSql('ALTER TABLE category ADD CONSTRAINT FK_64C19C17294869C FOREIGN KEY (article_id) REFERENCES article (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
     }
 
     public function down(Schema $schema): void
     {
         // this down() migration is auto-generated, please modify it to your needs
         $this->addSql('CREATE SCHEMA public');
+        $this->addSql('DROP SEQUENCE article_id_seq CASCADE');
+        $this->addSql('DROP SEQUENCE category_id_seq CASCADE');
+        $this->addSql('ALTER TABLE category DROP CONSTRAINT FK_64C19C17294869C');
         $this->addSql('DROP TABLE article');
+        $this->addSql('DROP TABLE category');
         $this->addSql('DROP TABLE messenger_messages');
     }
 }

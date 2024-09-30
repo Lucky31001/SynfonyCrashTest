@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+
+<title>Créé un article</title>
+
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        margin: 20px;
+        background-color: #f4f4f9;
+    }
+
+    form {
+        max-width: 600px;
+        margin: 0 auto;
+        padding: 20px;
+        border: 1px solid #ccc;
+        border-radius: 10px;
+        background-color: #fff;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    form div {
+        margin-bottom: 15px;
+    }
+
+    form label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: bold;
+        color: #333;
+    }
+
+    form input[type="text"],
+    form input[type="number"],
+    form select {
+        width: 100%;
+        padding: 10px;
+        box-sizing: border-box;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        background-color: #f9f9f9;
+    }
+
+    form button {
+        padding: 10px 15px;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+    form button:hover {
+        background-color: #0056b3;
+    }
+
+    a {
+        display: inline-block;
+        margin-top: 20px;
+        color: #007bff;
+        text-decoration: none;
+    }
+
+    a:hover {
+        text-decoration: underline;
+    }
+</style>
+
+{% block body %}
+    <h1>Create a new Article</h1>
+
+    {{ form_start(form) }}
+    <div>
+        {{ form_label(form.title) }}
+        {{ form_widget(form.title) }}
+    </div>
+    <div>
+        {{ form_label(form.content) }}
+        {{ form_widget(form.content) }}
+    </div>
+    <div>
+        {{ form_label(form.image) }}
+        {{ form_widget(form.image) }}
+    </div>
+    <div>
+        {{ form_label(form.price) }}
+        {{ form_widget(form.price) }}
+    </div>
+    <div>
+        {{ form_label(form.tva) }}
+        {{ form_widget(form.tva) }}
+    </div>
+    <div>
+        {{ form_label(form.category) }}
+        {{ form_widget(form.category) }}
+    </div>
+    <button type="submit">Create</button>
+    {{ form_end(form) }}
+
+    <a href="{{ path('hello_world') }}">back to list</a>
+{% endblock %}

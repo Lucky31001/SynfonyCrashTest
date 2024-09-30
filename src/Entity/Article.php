@@ -6,6 +6,7 @@ use ApiPlatform\Metadata\ApiResource;
 use App\Repository\ArticleRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\IdGenerator\UuidGenerator;
+use Symfony\Bridge\Doctrine\Types\UuidType;
 use Symfony\Component\Uid\Uuid;
 
 #[ORM\Entity(repositoryClass: ArticleRepository::class)]
@@ -13,14 +14,9 @@ use Symfony\Component\Uid\Uuid;
 class Article
 {
     #[ORM\Id]
-    #[ORM\Column(type: 'uuid', unique: true)]
-    #[ORM\GeneratedValue(strategy: 'CUSTOM')]
-    #[ORM\CustomIdGenerator(class: UuidGenerator::class)]
-    private ?Uuid $id = null;
-
-    #[ORM\ManyToOne(targetEntity: Category::class, cascade: ['persist'])]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?Category $category;
+    #[ORM\Column(unique: true)]
+    #[ORM\GeneratedValue]
+    private ?int $id;
 
     #[ORM\Column(type: 'string', length: 255)]
     private string $title;
@@ -39,6 +35,17 @@ class Article
 
     #[ORM\Column(type: 'integer')]
     private int $tva;
+
+
+    public function getCategory(): ?Category
+    {
+        return $this->category;
+    }
+
+    public function setCategory(?Category $category): void
+    {
+        $this->category = $category;
+    }
 
     public function getTva(): int
     {
@@ -100,7 +107,7 @@ class Article
         $this->title = $title;
     }
 
-    public function getId(): ?Uuid
+    public function getId(): ?int
     {
         return $this->id;
     }

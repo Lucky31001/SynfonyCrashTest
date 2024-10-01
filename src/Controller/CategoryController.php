@@ -39,4 +39,22 @@ class CategoryController extends AbstractController
     {
         return $this->render('category/success.html.twig');
     }
+
+    #[Route('/list/category', name: 'list_category')]
+    public function list(): Response
+    {
+        $categories = $this->categoryRepository->findAll();
+        return $this->render('category/list.html.twig', [
+            'categories' => $categories
+        ]);
+    }
+
+    #[Route('/delete/category/{id}', name: 'delete_category')]
+    public function delete(int $id): Response
+    {
+        $category = $this->categoryRepository->find($id);
+        $this->categoryRepository->delete($category);
+
+        return $this->redirectToRoute('list_category');
+    }
 }

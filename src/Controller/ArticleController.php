@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Article;
 use App\Entity\Category;
 use App\Form\ArticleForm;
+use App\Form\ModifArticleForm;
 use App\Repository\ArticleRepository;
 use App\Repository\CategoryRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -51,10 +52,30 @@ class ArticleController extends AbstractController
         return $this->render('article/success.html.twig');
     }
 
-    #[Route('/modif/article', name: 'modif_article')]
-    public function modif()
+    #[Route('/modif/article/{id}', name: 'modif_article')]
+    public function modif(int $id, Request $request): Response
     {
-        return $this->render('article/modifArticle.html.twig');
+        $article = $this->articleRepository->find($id);
+
+        $form = $this->createForm(ArticleForm::class, $article);
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $article->setTitle($form->get('title')->getData());
+            $article->setContent($form->get('content')->getData());
+            $article->setImage($form->get('image')->getData());
+            $article->setPrice($form->get('price')->getData());
+            $article->setTva($form->get('tva')->getData());
+            $category = $this->categoryRepository->find($form->get('category')->getData()->getId());
+            $article->setCategory($category);
+            $this->articleRepository->save($article);
+
+            return $this->redirectToRoute('show_article', ['id' => $id]);
+        }
+
+        return $this->render('article/modifArticle.html.twig', [
+            'form' => $form->createView(),
+        ]);
     }
 
     #[Route('/delete/article/{id}', name: 'delete_article')]
@@ -67,5 +88,14 @@ class ArticleController extends AbstractController
             [
                 'articles' => $articles
             ]);
+    }
+
+    #[Route('/{id}/article', name: 'show_article')]
+    public function show(int $id): Response
+    {
+        return $this->render('article/show.html.twig', [
+            'controller_name' => 'ItemController',
+            'article' => $this->articleRepository->find($id),
+        ]);
     }
 }

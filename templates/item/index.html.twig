@@ -3,12 +3,96 @@
 <title>Hello ItemController!</title>
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            background-color: #f4f4f9;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
 
-<div class="example-wrapper">
-    <h1>Item {{ id }}</h1>
-</div>
+        .example-wrapper {
+            width: 100%;
+            height: 100%;
+            font: 18px/1.5 sans-serif;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .article {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .article:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .article h2 {
+            color: #333;
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .article img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+
+        .article .content {
+            color: #666;
+            font-size: 16px;
+            margin-bottom: 10px;
+            border-color: #333333;
+            border-radius: 5px;
+        }
+
+        .article .price {
+            color: #333;
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+    </style>
+
+    <div class="example-wrapper">
+        <div class="article">
+            {% if article.fav >= 4 %}
+                <h2>{{ article.title }} 😎</h2>
+            {% elseif article.fav >= 2 %}
+                <h2>{{ article.title }} 😊</h2>
+            {% else %}
+                <h2>{{ article.title }}</h2>
+            {% endif %}
+            <img src="{{ article.image }}" alt="Article Image">
+            <div class="content">
+                <p>{{ article.content }}</p>
+            </div>
+            <div class="price">
+                <p>Prix : {{ article.price + (article.tva * article.price)/100 }}€</p>
+            </div>
+        </div>
+    </div>
 {% endblock %}

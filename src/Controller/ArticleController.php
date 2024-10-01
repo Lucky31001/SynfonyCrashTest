@@ -15,9 +15,10 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class ArticleController extends AbstractController
 {
-    public function __construct(private CategoryRepository $categoryRepository,
-                                private ArticleRepository $articleRepository)
-    {
+    public function __construct(
+        private CategoryRepository $categoryRepository,
+        private ArticleRepository $articleRepository
+    ) {
     }
     #[Route('/create/article/', name: 'create_article')]
     public function index(Request $request, EntityManagerInterface $entityManager): Response
@@ -32,9 +33,8 @@ class ArticleController extends AbstractController
             $article->setImage($form->get('image')->getData());
             $article->setPrice($form->get('price')->getData());
             $article->setTva($form->get('tva')->getData());
-            if ($category = $this->categoryRepository->findBy(['name' => $form->get('category')->getData()])) {
-                $article->setCategory($category);
-            }
+            $category = $this->categoryRepository->find($form->get('category')->getData()->getId());
+            $article->setCategory($category);
             $this->articleRepository->save($article);
 
             return $this->redirectToRoute('article_success');

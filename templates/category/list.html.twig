@@ -67,6 +67,7 @@
             <div class="category">
                 <h2>{{ category.name }}</h2>
                 <a href="{{ path('delete_category', {'id': category.id}) }}">Supprimer</a>
+                <a href="{{ path('modif_category', {'id': category.id}) }}">Modifier</a>
             </div>
         {% endfor %}
 

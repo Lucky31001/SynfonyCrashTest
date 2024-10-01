@@ -101,6 +101,7 @@
             {% else %}
                 <h2>{{ article.title }}</h2>
             {% endif %}
+            <p>{{ article.category.name }}</p>
             <img src="{{ article.image }}" alt="Article Image">
             <div class="content">
                 <p>{{ article.content }}</p>

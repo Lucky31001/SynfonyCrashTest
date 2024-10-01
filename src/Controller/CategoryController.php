@@ -57,4 +57,24 @@ class CategoryController extends AbstractController
 
         return $this->redirectToRoute('list_category');
     }
+
+    #[Route('/modif/category/{id}', name: 'modif_category')]
+    public function modif(int $id, Request $request): Response
+    {
+        $category = $this->categoryRepository->find($id);
+
+        $form = $this->createForm(CategoryForm::class, $category);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $category->setName($form->get('name')->getData());
+            $this->categoryRepository->save($category);
+
+            return $this->redirectToRoute('list_category');
+        }
+
+        return $this->render('category/modif.html.twig', [
+            'form' => $form->createView(),
+        ]);
+    }
 }

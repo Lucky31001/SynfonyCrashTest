@@ -84,10 +84,12 @@ class ArticleController extends AbstractController
         $article = $this->articleRepository->find($id);
         $this->articleRepository->delete($article);
         $articles = $this->articleRepository->findAll();
-        return $this->render('catalog/index.html.twig',
+        return $this->render(
+            'catalog/index.html.twig',
             [
                 'articles' => $articles
-            ]);
+            ]
+        );
     }
 
     #[Route('/{id}/article', name: 'show_article')]

@@ -74,7 +74,7 @@
     </style>
 
     <div class="example-wrapper">
-        <h1>Catalog</h1>
+        <h1>Catalogue</h1>
         {% for article in articles %}
             <a href="{{ path('item', {'id': article.id}) }}" class="article">
                 {% if article.fav >= 4 %}
@@ -87,9 +87,11 @@
                 <img src="{{ article.image }}" alt="Article Image">
                 <p>Prix : {{ article.price + (article.tva * article.price)/100 }}€</p>
                 <p>{{ article.content }}</p>
+                <a href="{{ path('modif_article', {'id': article.id}) }}">Modifier</a>
+                <a href="{{ path('delete_article', {'id': article.id}) }}">Supprimer</a>
             </a>
         {% endfor %}
-        <a href="{{ path('create_article') }}">Create an article</a>
+        <a href="{{ path('create_article') }}">Créé un article</a>
         <a href="{{ path('hello_world') }}">Home</a>
     </div>
 {% endblock %}

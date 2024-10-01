@@ -24,4 +24,6 @@ class CatalogController extends AbstractController
             'articles' => $articles
         ]);
     }
+
+
 }

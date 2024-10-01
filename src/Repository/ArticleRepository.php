@@ -24,4 +24,11 @@ class ArticleRepository extends ServiceEntityRepository
         $em->persist($article);
         $em->flush();
     }
+
+    public function delete(Article $article): void
+    {
+        $em = $this->getEntityManager();
+        $em->remove($article);
+        $em->flush();
+    }
 }

@@ -50,4 +50,22 @@ class ArticleController extends AbstractController
     {
         return $this->render('article/success.html.twig');
     }
+
+    #[Route('/modif/article', name: 'modif_article')]
+    public function modif()
+    {
+        return $this->render('article/modifArticle.html.twig');
+    }
+
+    #[Route('/delete/article/{id}', name: 'delete_article')]
+    public function delete(int $id)
+    {
+        $article = $this->articleRepository->find($id);
+        $this->articleRepository->delete($article);
+        $articles = $this->articleRepository->findAll();
+        return $this->render('catalog/index.html.twig',
+            [
+                'articles' => $articles
+            ]);
+    }
 }

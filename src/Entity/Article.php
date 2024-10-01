@@ -33,7 +33,7 @@ class Article
     #[ORM\Column(type: 'integer')]
     private int $price;
 
-    #[ORM\Column(type: 'integer')]
+    #[ORM\Column(type: 'integer', options: ['default' => 20])]
     private int $tva;
 
     #[ORM\ManyToOne(targetEntity: Category::class, cascade: ['persist'])]
@@ -124,5 +124,4 @@ class Article
     {
         $this->category = $category;
     }
-
 }

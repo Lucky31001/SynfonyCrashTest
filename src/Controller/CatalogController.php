@@ -11,7 +11,6 @@ use Symfony\Component\Routing\Attribute\Route;
 class CatalogController extends AbstractController
 {
     public function __construct(
-        private CalculService $calculService,
         private ArticleRepository $articleRepository
     ) {
     }
@@ -24,6 +23,4 @@ class CatalogController extends AbstractController
             'articles' => $articles
         ]);
     }
-
-
 }

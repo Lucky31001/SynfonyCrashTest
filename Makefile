@@ -55,3 +55,15 @@ ps:
 
 restart:
 	$(DOCKER_COMPOSE) restart
+
+sniff:
+	$(DOCKER_COMPOSE) run --rm $(PHP_CONTAINER) php vendor/bin/phpcs --standard=PSR12 src
+	$(DOCKER_COMPOSE) run --rm $(PHP_CONTAINER) php vendor/bin/phpcs --standard=PSR12 templates
+
+correct:
+	$(DOCKER_COMPOSE) run --rm $(PHP_CONTAINER) php vendor/bin/phpcbf --standard=PSR12 src
+	$(DOCKER_COMPOSE) run --rm $(PHP_CONTAINER) php vendor/bin/phpcbf --standard=PSR12 templates
+
+correct_all:
+	make prettier
+	make correct

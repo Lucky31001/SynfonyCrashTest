@@ -84,12 +84,14 @@
                 {% else %}
                     <h2>{{ article.title }}</h2>
                 {% endif %}
-                <img src="{{ article.image }}" alt="Article Image">
+                {% if article.image is not null %}
+                    <img src="{{ article.image }}" alt="Article Image">
+                {% endif %}
                 <p>Prix : {{ article.price + (article.tva * article.price)/100 }}€</p>
                 <p>{{ article.content }}</p>
             </a>
-                <a href="{{ path('modif_article', {'id': article.id}) }}">Modifier</a>
-                <a href="{{ path('delete_article', {'id': article.id}) }}">Supprimer</a>
+            <a href="{{ path('modif_article', {'id': article.id}) }}">Modifier</a>
+            <a href="{{ path('delete_article', {'id': article.id}) }}">Supprimer</a>
         {% endfor %}
         <a href="{{ path('create_article') }}">Créé un article</a>
         <a href="{{ path('hello_world') }}">Home</a>

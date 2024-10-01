@@ -31,9 +31,11 @@ class ArticleController extends AbstractController
             $article = new Article();
             $article->setTitle($form->get('title')->getData());
             $article->setContent($form->get('content')->getData());
-            $article->setImage($form->get('image')->getData());
+            if ($form->get('image')->getData() != null) {
+                $article->setImage($form->get('image')->getData());
+            }
             $article->setPrice($form->get('price')->getData());
-            $article->setTva($form->get('tva')->getData());
+            $article->setTva(20);
             $category = $this->categoryRepository->find($form->get('category')->getData()->getId());
             $article->setCategory($category);
             $this->articleRepository->save($article);
@@ -63,9 +65,10 @@ class ArticleController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $article->setTitle($form->get('title')->getData());
             $article->setContent($form->get('content')->getData());
-            $article->setImage($form->get('image')->getData());
+            if ($form->get('image')->getData() != null) {
+                $article->setImage($form->get('image')->getData());
+            }
             $article->setPrice($form->get('price')->getData());
-            $article->setTva($form->get('tva')->getData());
             $category = $this->categoryRepository->find($form->get('category')->getData()->getId());
             $article->setCategory($category);
             $this->articleRepository->save($article);

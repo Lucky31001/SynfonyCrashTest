@@ -10,6 +10,7 @@ install:
 
 # Commandes Docker
 run:
+	$(DOCKER_COMPOSE) run --rm $(PHP_CONTAINER) composer install
 	$(DOCKER_COMPOSE) run --rm php bin/console doctrine:database:create ||true
 	$(DOCKER_COMPOSE) run --rm php sh -c "./wait-for-it.sh -t 30 database:5432 && bin/console doctrine:migrations:migrate --no-interaction"
 	$(DOCKER_COMPOSE) up --remove-orphans -d

@@ -1,0 +1,34 @@
+{% include 'components/article_card/style.html.twig' %}
+
+<div style="">
+  <a href="{{ path('show_article', {'id': article.id}) }}" class="catalog-item">
+    <img
+      src="{{ article.image }}"
+      class="catalog-item-image"
+    />
+    <div class="catalog-item-content">
+      <h2 class="catalog-item-title">
+        {{ article.title }}
+      </h2>
+      <p class="catalog-item-description">{{ article.content }}</p>
+      <div class="catalog-item-details">
+        <span class="catalog-item-price">{{ article.price }}€ TTC</span>
+        <div class="catalog-item-fav-content">
+          {% set max_fav = 5 %} 
+          {% for i in 0..(max_fav - 1) %}
+            {% if i < article.fav %}
+              <span class="catalog-item-fav">⭐</span>
+            {% else %}
+              <span class="catalog-item-fav">☆</span>
+            {% endif %}
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+    <span class="catalog-item-number">{{ loop.index }}</span>
+  </a>
+  <div class="action-links-content">
+      <a href="{{ path('modif_article', {'id': article.id}) }}" class="action-links modifier">Modifier</a>
+      <a href="{{ path('delete_article', {'id': article.id}) }}" class="action-links supprimer">Supprimer</a>
+  </div>
+</div>

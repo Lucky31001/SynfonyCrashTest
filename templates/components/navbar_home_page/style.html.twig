@@ -1,0 +1,89 @@
+<style>
+  /* Navigation */
+  .container {
+    width: 90%;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  nav {
+    background-color: white;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    position: fixed;
+    width: 100%;
+    z-index: 1000;
+  }
+
+  .nav-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 0;
+  }
+
+  .logo {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: var(--primary-color);
+    text-decoration: none;
+  }
+
+  .nav-links {
+    display: flex;
+    list-style: none;
+    align-items: center;
+  }
+
+  .nav-links li {
+    margin-left: 1rem;
+  }
+
+  .nav-links a {
+    text-decoration: none;
+    color: #333;
+    font-weight: 500;
+    transition: color 0.3s ease;
+  }
+
+  .nav-links a:hover {
+    color: #ff8787;
+    text-decoration: underline;
+  }
+
+  .auths-links {
+    margin-left: 3rem;
+    display: flex;
+    align-items: center;
+  }
+
+  .auth-link {
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+    border: solid #d2d2d2;
+  }
+
+  .auth-link.signin:hover {
+    text-decoration: none;
+    border: solid #ff8787;
+  }
+
+  .auth-link.signup {
+    background-color: #ff8787;
+    color: #ffff;
+    border: solid #ff8787;
+  }
+
+  .auth-link.signup:hover {
+    transform: translateX(-15px);
+    box-shadow: 0 4px 10px rgba(255, 107, 107, 0.3);
+    color: #ffff;
+    text-decoration: none;
+  }
+
+  @media (max-width: 768px) {
+    .nav-links {
+      display: none;
+    }
+  }
+</style>

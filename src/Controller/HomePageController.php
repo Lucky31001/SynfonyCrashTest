@@ -12,7 +12,7 @@ class HomePageController extends AbstractController
     public function index(): Response
     {
         return $this->render('home_page/index.html.twig', [
-            'title_page' => 'Home Page',
+            'title_page' => 'Vintud - Home Page',
         ]);
     }
 }

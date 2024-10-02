@@ -25,6 +25,7 @@ class CatalogController extends AbstractController
             'title_page' => 'Vintud - Catalog',
             'articles' => $articles,
             'log' => (bool)$user
+
         ]);
     }
 }

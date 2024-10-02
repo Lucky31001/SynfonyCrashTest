@@ -3,22 +3,22 @@
 namespace App\Controller;
 
 use App\Entity\Article;
-use App\Entity\Category;
 use App\Form\ArticleForm;
 use App\Form\ModifArticleForm;
 use App\Repository\ArticleRepository;
-use App\Repository\CategoryRepository;
+use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 class ArticleController extends AbstractController
 {
     public function __construct(
-        private CategoryRepository $categoryRepository,
-        private ArticleRepository $articleRepository
+        private UserRepository $categoryRepository,
+        private ArticleRepository $articleRepository,
     ) {
     }
     #[Route('/create/article/', name: 'create_article')]
@@ -81,18 +81,14 @@ class ArticleController extends AbstractController
         ]);
     }
 
+    #[IsGranted('ROLE_ADMIN')]
     #[Route('/delete/article/{id}', name: 'delete_article')]
     public function delete(int $id)
     {
         $article = $this->articleRepository->find($id);
         $this->articleRepository->delete($article);
         $articles = $this->articleRepository->findAll();
-        return $this->render(
-            'catalog/index.html.twig',
-            [
-                'articles' => $articles
-            ]
-        );
+        return $this->redirectToRoute('catalog');
     }
 
     #[Route('/{id}/article', name: 'show_article')]

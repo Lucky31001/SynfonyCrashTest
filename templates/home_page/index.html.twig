@@ -1,0 +1,46 @@
+
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    {{title_page}}
+{% endblock %}
+
+{% block body %}
+    {% include 'components/navbar_home_page/index.html.twig' %}
+    {% include 'home_page/style.html.twig' %}
+    <header class="hero">
+        <div class="hero-content">
+            <h1>Découvrez des trésors vintage uniques</h1>
+            <p>Plongez dans notre collection d'objets rétro soigneusement sélectionnés et donnez une nouvelle vie à l'histoire</p>
+            <div class="cta-buttons">
+                <a href="#" class="cta-button cta-primary">Commencer l'aventure</a>
+            </div>
+        </div>
+        <div class="scroll-indicator">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/>
+            </svg>
+        </div>
+    </header>
+    <section class="features">
+        <div class="container">
+            <div class="features-grid">
+                <div class="feature">
+                    <div class="feature-icon">🔍</div>
+                    <h3>Trouvez facilement</h3>
+                    <p>Notre moteur de recherche avancé vous permet de dénicher rapidement la perle rare.</p>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">💰</div>
+                    <h3>Vendez en toute simplicité</h3>
+                    <p>Mettez en vente vos objets vintage en quelques clics et touchez une large audience.</p>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">🤝</div>
+                    <h3>Communauté passionnée</h3>
+                    <p>Échangez avec d'autres amateurs de vintage et partagez votre passion.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}

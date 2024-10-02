@@ -1,0 +1,100 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Vos produit en vente!{% endblock %}
+
+{% block body %}
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+        }
+
+        .example-wrapper {
+            margin: 20px auto;
+            max-width: 800px;
+            width: 95%;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #333;
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        p {
+            color: #666;
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+
+        .article {
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+
+        .article:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .article img {
+            max-width: 100px;
+            height: 100px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+
+        .article p {
+            color: #333;
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+
+        .example-wrapper a {
+            display: inline-block;
+            margin: 10px 0;
+            padding: 10px 15px;
+            background-color: #00796b;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        .example-wrapper a:hover {
+            background-color: #0056b3;
+        }
+    </style>
+
+<div class="example-wrapper">
+    <h1>Vos produit en vente!</h1>
+    <p>Voici la liste de vos produit en vente:</p>
+    {% for article in onSale %}
+        <div>
+            <a href="{{ path('show_article', {'id': article.id}) }}">
+                    <img src="{{ article.image }}" alt="{{ article.title }}" style="width: 100px; height: 100px;">
+                <p>{{ article.title }}</p>
+                <p>{{ article.content }}</p>
+                <p>Prix : {{ article.price + (article.tva * article.price)/100 }}€</p>
+                <a href="{{ path('modif_article', {'id': article.id}) }}">Modifier</a>
+                <a href="{{ path('delete_article', {'id': article.id}) }}">Supprimer</a>
+            </a>
+        </div>
+    {% endfor %}
+    <a href="{{ path('create_article') }}">Ajouter un produit</a>
+    <a href="{{ path('catalog') }}">Catalogue</a>
+</div>
+{% endblock %}

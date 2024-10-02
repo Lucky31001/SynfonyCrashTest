@@ -74,9 +74,12 @@
     </style>
 
     <div class="example-wrapper">
+        {% if log %}
+            <a href="{{ path('on_sale') }}">Liste de vos article mis en vente</a>
+        {% endif %}
         <h1>Catalogue</h1>
         {% if log %}
-        <h1>{{ app.user.userIdentifier }}</h1>
+            <h1>{{ app.user.userIdentifier }}</h1>
         {% endif %}
         {% for article in articles %}
             <a href="{{ path('show_article', {'id': article.id}) }}" class="article">

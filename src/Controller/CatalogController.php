@@ -19,7 +19,7 @@ class CatalogController extends AbstractController
     {
         $articles = $this->articleRepository->findAll();
         return $this->render('catalog/index.html.twig', [
-            'controller_name' => 'CatalogController',
+            'title_page' => 'Vintud - Catalog',
             'articles' => $articles
         ]);
     }

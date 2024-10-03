@@ -3,20 +3,20 @@
 namespace App\Controller;
 
 use App\Form\FilterType;
+use App\Repository\CategoryRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use App\Repository\MoneyRepository;
 use App\Repository\ArticleRepository;
 use App\Repository\OnSaleRepository;
-use App\Repository\UserRepository;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 
 class MoneyController extends AbstractController
 {
     public function __construct(
-        private UserRepository $categoryRepository,
+        private CategoryRepository $categoryRepository,
         private ArticleRepository $articleRepository,
         private OnSaleRepository $onSaleRepository,
         private Security $security,

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+
+<title>Hello World !</title>
+
+{% block body %}
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f4f4f9;
+        }
+
+        .example-wrapper {
+            margin: 1em auto;
+            max-width: 800px;
+            width: 95%;
+            font: 18px/1.5 sans-serif;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .example-wrapper h1 {
+            color: #333;
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        .example-wrapper a {
+            display: inline-block;
+            margin: 10px 0;
+            padding: 10px 15px;
+            background-color: #007bff;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        .example-wrapper a:hover {
+            background-color: #0056b3;
+        }
+    </style>
+
+    <div class="example-wrapper">
+        <h1>Salut ma couille! ✅</h1>
+        <a href="{{ path('catalog') }}">Catalogue</a>
+        <a href="{{ path('list_category') }}">Liste des catégories</a>
+    </div>
+{% endblock %}

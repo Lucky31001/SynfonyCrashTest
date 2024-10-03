@@ -10,7 +10,6 @@ install:
 
 # Commandes Docker
 run:
-	$(DOCKER_COMPOSE) run --rm $(PHP_CONTAINER) composer install
 	$(DOCKER_COMPOSE) run --rm php bin/console doctrine:database:create ||true
 	$(DOCKER_COMPOSE) run --rm php sh -c "./wait-for-it.sh -t 30 database:5432 && bin/console doctrine:migrations:migrate --no-interaction"
 	$(DOCKER_COMPOSE) up --remove-orphans -d
@@ -56,15 +55,3 @@ ps:
 
 restart:
 	$(DOCKER_COMPOSE) restart
-
-sniff:
-	$(DOCKER_COMPOSE) run --rm $(PHP_CONTAINER) php vendor/bin/phpcs --standard=PSR12 src
-	$(DOCKER_COMPOSE) run --rm $(PHP_CONTAINER) php vendor/bin/phpcs --standard=PSR12 templates
-
-correct:
-	$(DOCKER_COMPOSE) run --rm $(PHP_CONTAINER) php vendor/bin/phpcbf --standard=PSR12 src
-	$(DOCKER_COMPOSE) run --rm $(PHP_CONTAINER) php vendor/bin/phpcbf --standard=PSR12 templates
-
-correct_all:
-	make prettier
-	make correct

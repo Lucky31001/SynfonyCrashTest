@@ -12,7 +12,7 @@ class ArticleFixtures extends Fixture implements DependentFixtureInterface
 {
     public function load(ObjectManager $manager): void
     {
-        for ($i = 0; $i < 5; $i++) {
+        for ($i = 0; $i < 5 ; $i++) {
             $article = new Article();
             $article->setTitle('Article ' . $i);
             $article->setContent('This is the content of article ' . $i);
@@ -34,4 +34,5 @@ class ArticleFixtures extends Fixture implements DependentFixtureInterface
             CategoryFixtures::class,
         ];
     }
+
 }

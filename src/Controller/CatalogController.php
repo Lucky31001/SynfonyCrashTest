@@ -53,7 +53,7 @@ class CatalogController extends AbstractController
         $user = $this->security->getUser();
         $articles = $this->articleRepository->findBy(['category' => $id]);
         return $this->render('catalog/filteredArticle.html.twig', [
-            'controller_name' => 'CatalogController',
+            'title_page' => 'Vintud - Catalogue',
             'articles' => $articles,
             'log' => (bool)$user,
             'filter_form' => $filterForm->createView(),

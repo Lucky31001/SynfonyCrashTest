@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Form\FilterType;
 use App\Repository\ArticleRepository;
 use App\Repository\CategoryRepository;
+use App\Repository\OnSaleRepository;
 use App\Service\CalculService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -19,6 +20,7 @@ class CatalogController extends AbstractController
         private ArticleRepository $articleRepository,
         private Security $security,
         private CategoryRepository $categoryRepository,
+        private OnSaleRepository $onSaleRepository,
     ) {
     }
     #[Route('/', name: 'catalog')]
@@ -34,11 +36,18 @@ class CatalogController extends AbstractController
 
         $user = $this->security->getUser();
         $articles = $this->articleRepository->findAll();
+
+        foreach ($articles as $article) {
+            $user = $this->security->getUser();
+            $onsale = $this->onSaleRepository->findOneBy(['article' => $article, 'user' => $user]);
+            $canDelete[] = (bool)$onsale;
+        }
         return $this->render('catalog/index.html.twig', [
             'title_page' => 'Vintud - Catalog',
             'articles' => $articles,
             'log' => (bool)$user,
             'filter_form' => $filterForm->createView(),
+            'canDelete' => $canDelete,
         ]);
     }
     #[Route('filter/{id}', name: 'filtered_catalog')]

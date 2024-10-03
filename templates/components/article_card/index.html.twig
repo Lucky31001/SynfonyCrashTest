@@ -32,14 +32,16 @@
     <span class="catalog-item-number">{{ loop.index }}</span>
   </a>
   {% if log %}
-    <div class="action-links-content">
-        <a href="{{ path('modif_article', {'id': article.id}) }}" class="action-links modifier">
-          <i data-lucide="pencil"></i>
-        </a>
-        <a href="{{ path('delete_article', {'id': article.id}) }}" class="action-links supprimer">
-          <i data-lucide="trash-2"></i>
-        </a>
+      {% if canDelete[loop.index - 1] %}
+        <div class="action-links-content">
+            <a href="{{ path('modif_article', {'id': article.id}) }}" class="action-links modifier">
+                <i data-lucide="pencil"></i>
+            </a>
+            <a href="{{ path('delete_article', {'id': article.id}) }}" class="action-links supprimer">
+                <i data-lucide="trash-2"></i>
+            </a>
     </div>
+      {% endif %}
   {% endif %}
 </div>
 

@@ -40,7 +40,7 @@ class CatalogController extends AbstractController
             'filter_form' => $filterForm->createView(),
         ]);
     }
-    #[Route('/{id}', name: 'filtered_catalog')]
+    #[Route('filter/{id}', name: 'filtered_catalog')]
     public function filterArticle(int $id, Request $request): Response
     {
         $filterForm = $this->createForm(FilterType::class);

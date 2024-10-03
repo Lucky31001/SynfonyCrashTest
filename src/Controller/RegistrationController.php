@@ -40,7 +40,7 @@ class RegistrationController extends AbstractController
             
             $money = new Money();
             $money->setAccount(0);
-            $money->setUserId($user);
+            $money->setUser($user);
             $this->moneyRepository->save($money);
 
             // do anything else you need here, like send an email

@@ -37,10 +37,11 @@ class CatalogController extends AbstractController
         $user = $this->security->getUser();
         $articles = $this->articleRepository->findAll();
 
-        $money = $this->moneyRepository->findOneBy(['user_id' => $user]);
-        $moneyAccount = $money->getAccount();
-        
-        $this->moneyRepository->save($money);
+        $moneyAccount = 0;
+        if ($user) {
+            $money = $this->moneyRepository->findOneBy(['user' => $user]);
+            $moneyAccount = $money->getAccount();
+        }        
 
         return $this->render('catalog/index.html.twig', [
             'title_page' => 'Vintud - Catalog',

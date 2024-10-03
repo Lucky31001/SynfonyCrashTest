@@ -1,6 +1,4 @@
 {% include 'components/article_card/style.html.twig' %}
-{% set currentPath = path(app.request.attributes.get('_route'),
-    app.request.attributes.get('_route_params')) %}
 <div class="catalog-content-item">
   <a href="{{ path('show_article', {'id': article.id}) }}" class="catalog-item">
     <img
@@ -16,18 +14,9 @@
         <span class="catalog-item-price">{{ article.price + (article.tva * article.price)/100 }} €</span>
         <div class="catalog-item-fav-content">
             <a href="{{ path('app_favorite_add', {'article_id': article.id}) }}">
-            {% set max_fav = 5 %}
-            {% for i in 0..(max_fav - 1) %}
-            {% if i < article.fav %}
-              <span class="catalog-item-fav">
-                <i data-lucide="star" class="fav-icon"><a href="{{ path('app_favorite_add', {'article_id': article.id,'route_name':currentPath}) }}"></a> </i>
-              </span>
-            {% else %}
               <span class="catalog-item-fav">
                  <i data-lucide="star"></i>
               </span>
-            {% endif %}
-          {% endfor %}
             </a>
         </div>
       </div>

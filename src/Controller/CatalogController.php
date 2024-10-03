@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Form\FilterType;
 use App\Repository\ArticleRepository;
 use App\Repository\CategoryRepository;
+use App\Service\CalculService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;

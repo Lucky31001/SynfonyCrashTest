@@ -4,6 +4,8 @@ namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
 use App\Repository\ArticleRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: ArticleRepository::class)]
@@ -37,9 +39,16 @@ class Article
     #[ORM\JoinColumn(nullable: true)]
     private ?Category $category;
 
+    /**
+     * @var Collection<int, Favorite>
+     */
+    #[ORM\OneToMany(targetEntity: Favorite::class, mappedBy: 'aritcle_id')]
+    private Collection $favorites;
+
     public function __construct()
     {
         $this->setFav(0);
+        $this->favorites = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -120,5 +129,35 @@ class Article
     public function setCategory(?Category $category): void
     {
         $this->category = $category;
+    }
+
+    /**
+     * @return Collection<int, Favorite>
+     */
+    public function getFavorites(): Collection
+    {
+        return $this->favorites;
+    }
+
+    public function addFavorite(Favorite $favorite): static
+    {
+        if (!$this->favorites->contains($favorite)) {
+            $this->favorites->add($favorite);
+            $favorite->setAritcleId($this);
+        }
+
+        return $this;
+    }
+
+    public function removeFavorite(Favorite $favorite): static
+    {
+        if ($this->favorites->removeElement($favorite)) {
+            // set the owning side to null (unless already changed)
+            if ($favorite->getAritcleId() === $this) {
+                $favorite->setAritcleId(null);
+            }
+        }
+
+        return $this;
     }
 }

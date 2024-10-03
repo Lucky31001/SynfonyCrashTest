@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Repository\ArticleRepository;
 use App\Repository\MoneyRepository;
+use App\Repository\NotificationRepository;
 use App\Repository\OnSaleRepository;
 use App\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -18,7 +19,8 @@ class OnSaleController extends AbstractController
         private UserRepository $userRepository,
         private OnSaleRepository $onSaleRepository,
         private ArticleRepository $articleRepository,
-        private MoneyRepository $moneyRepository
+        private MoneyRepository $moneyRepository,
+        private NotificationRepository $notificationRepository
     ) {
     }
     /*
@@ -40,12 +42,15 @@ class OnSaleController extends AbstractController
         $money = $this->moneyRepository->findOneBy(['user' => $this->security->getUser()]);
         $moneyAccount = $money->getAccount();
 
+        $NewNotification = $this->notificationRepository->count(['user' => $user, 'isRead' => false]);
+
         return $this->render('on_sale/index.html.twig', [
             'title_page' => 'Vintud - On Sale',
             'onSale' => $tab,
             'log' => (bool)$user,
             'moneyAccount' => $moneyAccount,
             'canDelete' => $canDelete,
+            'NewNotification' => $NewNotification
         ]);
     }
 }

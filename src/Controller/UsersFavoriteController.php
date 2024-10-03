@@ -6,6 +6,7 @@ use App\Repository\ArticleRepository;
 use App\Repository\CategoryRepository;
 use App\Repository\FavoriteRepository;
 use App\Repository\MoneyRepository;
+use App\Repository\NotificationRepository;
 use App\Repository\OnSaleRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
@@ -21,6 +22,7 @@ class UsersFavoriteController extends AbstractController
         private MoneyRepository $moneyRepository,
         private OnSaleRepository $onSaleRepository,
         private readonly FavoriteRepository $favoriteRepository,
+        private readonly NotificationRepository $notificationRepository
     ) {
     }
     #[Route('/catalog/favorites/', name: 'app_users_favorite')]
@@ -45,12 +47,15 @@ class UsersFavoriteController extends AbstractController
             $canDelete[] = (bool)$onsale;
         }
 
+        $NewNotification = $this->notificationRepository->count(['user' => $user, 'isRead' => false]);
+
         return $this->render('users_favorite/index.html.twig', [
             'title_page' => 'Vintud - Favorite',
             'articles' => $articles,
             'canDelete' => $canDelete,
             'log' => (bool)$user,
             'moneyAccount' => $moneyAccount,
+            'NewNotification' => $NewNotification
         ]);
     }
 }

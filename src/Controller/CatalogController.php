@@ -6,6 +6,7 @@ use App\Form\FilterType;
 use App\Repository\ArticleRepository;
 use App\Repository\CategoryRepository;
 use App\Repository\MoneyRepository;
+use App\Repository\NotificationRepository;
 use App\Repository\OnSaleRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -22,6 +23,7 @@ class CatalogController extends AbstractController
         private CategoryRepository $categoryRepository,
         private MoneyRepository $moneyRepository,
         private OnSaleRepository $onSaleRepository,
+        private NotificationRepository $notificationRepository
     ) {
     }
     #[Route('/', name: 'catalog')]
@@ -51,6 +53,8 @@ class CatalogController extends AbstractController
             $canDelete[] = (bool)$onsale;
         }
 
+        $NewNotification = $this->notificationRepository->count(['user' => $user, 'isRead' => false]);
+
         return $this->render('catalog/index.html.twig', [
             'title_page' => 'Vintud - Catalogue',
             'articles' => $articles,
@@ -58,6 +62,7 @@ class CatalogController extends AbstractController
             'filter_form' => $filterForm->createView(),
             'canDelete' => $canDelete,
             'moneyAccount' => $moneyAccount,
+            'NewNotification' => $NewNotification,
         ]);
     }
     #[Route('filter/{id}', name: 'filtered_catalog')]

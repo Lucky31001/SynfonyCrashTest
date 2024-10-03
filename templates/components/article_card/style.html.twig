@@ -1,11 +1,15 @@
 <style>
-  .catalog-item {
+  .catalog-content-item {
     text-decoration: none;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
     border-radius: 0.5rem;
     transition: transform 0.2s ease-in-out;
     background-color: #ffff;
     position: relative;
+  }
+  .catalog-item {
+    text-decoration: none;
+    border-radius: 0.5rem;
   }
   .catalog-item:hover {
     transform: translateY(-5px);
@@ -14,7 +18,7 @@
     width: 100%;
     height: 200px;
     object-fit: cover;
-    background: #bebcbc;
+    background: #dbdbdb;
   }
   .catalog-item-content {
     padding: 1rem;
@@ -41,18 +45,22 @@
   }
   .catalog-item-fav-content {
     display: flex;
-    gap: 10px;
+    justify-content:   center;
+    gap: 5px;
   }
   .catalog-item-fav {
     display: flex;
     align-items: center;
     color: #ed8936;
   }
+  .fav-icon {
+    fill: #ed8936;
+  }
   .catalog-item-number {
     border-radius: 0 0.5rem;
     background-color: rgba(0, 0, 0, 0.5);
     color: white;
-    padding: 0.15rem 0.25rem;
+    padding: 0.05rem 0.35rem;
     font-size: 0.75rem;
     position: absolute;
     left: 0;
@@ -61,24 +69,26 @@
 
   .action-links-content {
     display: flex;
+    position: absolute;
+    top: 10px;
+    right: 0;
   }
   .action-links {
     text-decoration: none;
     padding: 10px 15px;
     margin-right: 10px;
-    border-radius: 5px;
+    border-radius: 10px;
     color: white;
     font-size: 14px;
     font-weight: bold;
-    width: 100px;
     text-align: center;
-    height: 40px;
     display: flex;
     align-items: center;
     justify-content: center;
   }
   .modifier {
-    background-color: #28a745;
+    background-color: #fefefe;
+    color: #2d3748;
   }
   .supprimer {
     background-color: #dc3545;

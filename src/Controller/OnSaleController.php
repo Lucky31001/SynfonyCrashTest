@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Repository\ArticleRepository;
+use App\Repository\MoneyRepository;
 use App\Repository\OnSaleRepository;
 use App\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -16,7 +17,8 @@ class OnSaleController extends AbstractController
         private Security $security,
         private UserRepository $userRepository,
         private OnSaleRepository $onSaleRepository,
-        private ArticleRepository $articleRepository
+        private ArticleRepository $articleRepository,
+        private MoneyRepository $moneyRepository
     ) {
     }
     /*
@@ -28,15 +30,22 @@ class OnSaleController extends AbstractController
         $user = $this->userRepository->findOneBy(['email' => $this->security->getUser()->getUserIdentifier()]);
         $onSale = $this->onSaleRepository->findByUserWithArticles($user);
         $tab = [];
+        $canDelete = [];
         $user = $this->security->getUser();
         foreach ($onSale as $sale) {
             $tab[] = $sale->getArticle();
+            $onsale = $this->onSaleRepository->findOneBy(['article' => $sale->getArticle(), 'user' => $user]);
+            $canDelete[] = (bool)$onsale;
         }
+        $money = $this->moneyRepository->findOneBy(['user' => $this->security->getUser()]);
+        $moneyAccount = $money->getAccount();
 
         return $this->render('on_sale/index.html.twig', [
             'title_page' => 'Vintud - On Sale',
             'onSale' => $tab,
-            'log' => (bool)$user
+            'log' => (bool)$user,
+            'moneyAccount' => $moneyAccount,
+            'canDelete' => $canDelete,
         ]);
     }
 }

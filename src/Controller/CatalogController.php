@@ -38,19 +38,13 @@ class CatalogController extends AbstractController
         $user = $this->security->getUser();
         $articles = $this->articleRepository->findAll();
 
-        $money = $this->moneyRepository->findOneBy(['user_id' => $user]);
-        $moneyAccount = $money->getAccount();
-
-        $this->moneyRepository->save($money);
-
         $moneyAccount = 0;
         if ($user) {
             $money = $this->moneyRepository->findOneBy(['user' => $user]);
             $moneyAccount = $money->getAccount();
         }
 
-
-
+        $canDelete = [];
         foreach ($articles as $article) {
             $user = $this->security->getUser();
             $onsale = $this->onSaleRepository->findOneBy(['article' => $article, 'user' => $user]);
@@ -63,7 +57,7 @@ class CatalogController extends AbstractController
             'log' => (bool)$user,
             'filter_form' => $filterForm->createView(),
             'canDelete' => $canDelete,
-            'moneyAccount' => $moneyAccount
+            'moneyAccount' => $moneyAccount,
         ]);
     }
     #[Route('filter/{id}', name: 'filtered_catalog')]

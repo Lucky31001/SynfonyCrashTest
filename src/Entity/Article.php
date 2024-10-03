@@ -43,6 +43,7 @@ class Article
     public function __construct()
     {
         $this->setFav(0);
+        $this->setShow(1);
     }
 
     public function getId(): ?int

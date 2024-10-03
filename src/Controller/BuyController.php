@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Buy;
 use App\Repository\BuyRepository;
 use App\Entity\Sell;
+use App\Repository\NotificationRepository;
 use App\Repository\SellRepository;
 use App\Repository\UserRepository;
 use App\Repository\ArticleRepository;
@@ -25,6 +26,7 @@ class BuyController extends AbstractController
         private OnSaleRepository $onSaleRepository,
         private Security $security,
         private MoneyRepository $moneyRepository,
+        private NotificationRepository $notificationRepository
     ) {
     }
 
@@ -127,10 +129,21 @@ class BuyController extends AbstractController
             }
         }
 
+        $canDelete = [];
+        foreach ($articles as $article) {
+            $user = $this->security->getUser();
+            $onsale = $this->onSaleRepository->findOneBy(['article' => $article, 'user' => $user]);
+            $canDelete[] = (bool)$onsale;
+        }
+
+        $NewNotification = $this->notificationRepository->count(['user' => $user, 'isRead' => false]);
+
         return $this->render('my-purchases/show.html.twig', [
             'log' => (bool)$user,
             'moneyAccount' => $moneyAccount,
-            'articles' => $articles
+            'articles' => $articles,
+            'canDelete' => $canDelete,
+            'NewNotification' => $NewNotification
         ]);
     }
 
@@ -164,12 +177,22 @@ class BuyController extends AbstractController
             }
         }
 
+        $canDelete = [];
+        foreach ($articles as $article) {
+            $user = $this->security->getUser();
+            $onsale = $this->onSaleRepository->findOneBy(['article' => $article, 'user' => $user]);
+            $canDelete[] = (bool)$onsale;
+        }
+
+        $NewNotification = $this->notificationRepository->count(['user' => $user, 'isRead' => false]);
 
 
         return $this->render('my-sell/show.html.twig', [
             'log' => (bool)$user,
             'moneyAccount' => $moneyAccount,
-            'articles' => $articles
+            'articles' => $articles,
+            'canDelete' => $canDelete,
+            'NewNotification' => $NewNotification
         ]);
     }
 }

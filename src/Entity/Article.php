@@ -139,10 +139,11 @@ class Article
         return $this->show;
     }
 
-    public function setShow(bool $show): static
+    public function setShow(?bool $show): void
     {
         $this->show = $show;
     }
+
     /**
      * @return Collection<int, Favorite>
      */

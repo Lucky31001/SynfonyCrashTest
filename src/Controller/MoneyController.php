@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Form\FilterType;
 use App\Repository\CategoryRepository;
+use App\Repository\NotificationRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -20,7 +21,8 @@ class MoneyController extends AbstractController
         private ArticleRepository $articleRepository,
         private OnSaleRepository $onSaleRepository,
         private Security $security,
-        private MoneyRepository $moneyRepository
+        private MoneyRepository $moneyRepository,
+        private NotificationRepository $notificationRepository
     ) {
     }
     #[Route('/money/add', name: 'add_money')]
@@ -42,12 +44,23 @@ class MoneyController extends AbstractController
         $money ->setAccount($moneyAccount + 100);
         $this->moneyRepository->save($money);
 
+        $NewNotification = $this->notificationRepository->count(['user' => $user, 'isRead' => false]);
+
+        $canDelete = [];
+        foreach ($articles as $article) {
+            $user = $this->security->getUser();
+            $onsale = $this->onSaleRepository->findOneBy(['article' => $article, 'user' => $user]);
+            $canDelete[] = (bool)$onsale;
+        }
+
         return $this->render('catalog/index.html.twig', [
             'title_page' => 'Vintud - Catalog',
             'articles' => $articles,
             'log' => (bool)$user,
             'filter_form' => $filterForm->createView(),
-            'moneyAccount' => $moneyAccount
+            'moneyAccount' => $moneyAccount,
+            'NewNotification' => $NewNotification,
+            'canDelete' => $canDelete
         ]);
     }
 }

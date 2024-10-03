@@ -43,6 +43,12 @@ class CatalogController extends AbstractController
 
         $this->moneyRepository->save($money);
 
+        $moneyAccount = 0;
+        if ($user) {
+            $money = $this->moneyRepository->findOneBy(['user' => $user]);
+            $moneyAccount = $money->getAccount();
+        }
+
 
         foreach ($articles as $article) {
             $user = $this->security->getUser();

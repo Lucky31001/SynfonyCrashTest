@@ -5,7 +5,7 @@ namespace App\Controller;
 use App\Form\FilterType;
 use App\Repository\ArticleRepository;
 use App\Repository\CategoryRepository;
-use App\Service\CalculService;
+use App\Repository\MoneyRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
@@ -19,6 +19,8 @@ class CatalogController extends AbstractController
         private ArticleRepository $articleRepository,
         private Security $security,
         private CategoryRepository $categoryRepository,
+        private MoneyRepository $moneyRepository
+
     ) {
     }
     #[Route('/', name: 'catalog')]
@@ -34,11 +36,18 @@ class CatalogController extends AbstractController
 
         $user = $this->security->getUser();
         $articles = $this->articleRepository->findAll();
+
+        $money = $this->moneyRepository->findOneBy(['user_id' => $user]);
+        $moneyAccount = $money->getAccount();
+        
+        $this->moneyRepository->save($money);
+
         return $this->render('catalog/index.html.twig', [
             'title_page' => 'Vintud - Catalog',
             'articles' => $articles,
             'log' => (bool)$user,
             'filter_form' => $filterForm->createView(),
+            'moneyAccount' => $moneyAccount
         ]);
     }
     #[Route('filter/{id}', name: 'filtered_catalog')]

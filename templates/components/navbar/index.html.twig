@@ -13,6 +13,11 @@
         <i data-lucide="plus-"></i>
         Ajouter une catégorie
       </a>
+      <a href="{{ path('add_money') }}" class="add-article-button">
+        <i data-lucide="plus-"></i>
+        Ajouter money
+      </a>
+      {{moneyAccount}}
       {% include 'components/avatar/index.html.twig' %} 
     {% else %}
       <div class="auths-links">

@@ -13,7 +13,7 @@
       </h2>
       <p class="catalog-item-description">{{ article.content }}</p>
       <div class="catalog-item-details">
-        <span class="catalog-item-price">{{ article.price }} €</span>
+        <span class="catalog-item-price">{{ article.price + (article.tva * article.price)/100 }} €</span>
         <div class="catalog-item-fav-content">
             <a href="{{ path('app_favorite_add', {'article_id': article.id}) }}">
             {% set max_fav = 5 %}

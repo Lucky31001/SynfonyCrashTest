@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20241003151809 extends AbstractMigration
+final class Version20241003202511 extends AbstractMigration
 {
     public function getDescription(): string
     {
@@ -22,12 +22,16 @@ final class Version20241003151809 extends AbstractMigration
         // this up() migration is auto-generated, please modify it to your needs
         $this->addSql('CREATE SEQUENCE article_id_seq INCREMENT BY 1 MINVALUE 1 START 1');
         $this->addSql('CREATE SEQUENCE category_id_seq INCREMENT BY 1 MINVALUE 1 START 1');
+        $this->addSql('CREATE SEQUENCE favorite_id_seq INCREMENT BY 1 MINVALUE 1 START 1');
         $this->addSql('CREATE SEQUENCE money_id_seq INCREMENT BY 1 MINVALUE 1 START 1');
         $this->addSql('CREATE SEQUENCE on_sale_id_seq INCREMENT BY 1 MINVALUE 1 START 1');
         $this->addSql('CREATE SEQUENCE "user_id_seq" INCREMENT BY 1 MINVALUE 1 START 1');
         $this->addSql('CREATE TABLE article (id INT NOT NULL, category_id INT DEFAULT NULL, title VARCHAR(255) NOT NULL, content VARCHAR(1024) DEFAULT NULL, image VARCHAR(1024) DEFAULT NULL, fav INT DEFAULT 0, price INT NOT NULL, tva INT DEFAULT 20 NOT NULL, PRIMARY KEY(id))');
         $this->addSql('CREATE INDEX IDX_23A0E6612469DE2 ON article (category_id)');
         $this->addSql('CREATE TABLE category (id INT NOT NULL, name VARCHAR(255) NOT NULL, PRIMARY KEY(id))');
+        $this->addSql('CREATE TABLE favorite (id INT NOT NULL, user_id_id INT NOT NULL, article_id_id INT NOT NULL, PRIMARY KEY(id))');
+        $this->addSql('CREATE INDEX IDX_68C58ED99D86650F ON favorite (user_id_id)');
+        $this->addSql('CREATE INDEX IDX_68C58ED98F3EC46 ON favorite (article_id_id)');
         $this->addSql('CREATE TABLE money (id INT NOT NULL, user_id INT NOT NULL, account DOUBLE PRECISION NOT NULL, PRIMARY KEY(id))');
         $this->addSql('CREATE UNIQUE INDEX UNIQ_B7DF13E4A76ED395 ON money (user_id)');
         $this->addSql('CREATE TABLE on_sale (id INT NOT NULL, article_id INT DEFAULT NULL, user_id INT DEFAULT NULL, PRIMARY KEY(id))');
@@ -51,6 +55,8 @@ final class Version20241003151809 extends AbstractMigration
         $this->addSql('DROP TRIGGER IF EXISTS notify_trigger ON messenger_messages;');
         $this->addSql('CREATE TRIGGER notify_trigger AFTER INSERT OR UPDATE ON messenger_messages FOR EACH ROW EXECUTE PROCEDURE notify_messenger_messages();');
         $this->addSql('ALTER TABLE article ADD CONSTRAINT FK_23A0E6612469DE2 FOREIGN KEY (category_id) REFERENCES category (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
+        $this->addSql('ALTER TABLE favorite ADD CONSTRAINT FK_68C58ED99D86650F FOREIGN KEY (user_id_id) REFERENCES "user" (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
+        $this->addSql('ALTER TABLE favorite ADD CONSTRAINT FK_68C58ED98F3EC46 FOREIGN KEY (article_id_id) REFERENCES article (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
         $this->addSql('ALTER TABLE money ADD CONSTRAINT FK_B7DF13E4A76ED395 FOREIGN KEY (user_id) REFERENCES "user" (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
         $this->addSql('ALTER TABLE on_sale ADD CONSTRAINT FK_AC20CA5B7294869C FOREIGN KEY (article_id) REFERENCES article (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
         $this->addSql('ALTER TABLE on_sale ADD CONSTRAINT FK_AC20CA5BA76ED395 FOREIGN KEY (user_id) REFERENCES "user" (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
@@ -62,15 +68,19 @@ final class Version20241003151809 extends AbstractMigration
         $this->addSql('CREATE SCHEMA public');
         $this->addSql('DROP SEQUENCE article_id_seq CASCADE');
         $this->addSql('DROP SEQUENCE category_id_seq CASCADE');
+        $this->addSql('DROP SEQUENCE favorite_id_seq CASCADE');
         $this->addSql('DROP SEQUENCE money_id_seq CASCADE');
         $this->addSql('DROP SEQUENCE on_sale_id_seq CASCADE');
         $this->addSql('DROP SEQUENCE "user_id_seq" CASCADE');
         $this->addSql('ALTER TABLE article DROP CONSTRAINT FK_23A0E6612469DE2');
+        $this->addSql('ALTER TABLE favorite DROP CONSTRAINT FK_68C58ED99D86650F');
+        $this->addSql('ALTER TABLE favorite DROP CONSTRAINT FK_68C58ED98F3EC46');
         $this->addSql('ALTER TABLE money DROP CONSTRAINT FK_B7DF13E4A76ED395');
         $this->addSql('ALTER TABLE on_sale DROP CONSTRAINT FK_AC20CA5B7294869C');
         $this->addSql('ALTER TABLE on_sale DROP CONSTRAINT FK_AC20CA5BA76ED395');
         $this->addSql('DROP TABLE article');
         $this->addSql('DROP TABLE category');
+        $this->addSql('DROP TABLE favorite');
         $this->addSql('DROP TABLE money');
         $this->addSql('DROP TABLE on_sale');
         $this->addSql('DROP TABLE "user"');

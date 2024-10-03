@@ -3,11 +3,12 @@
 namespace App\Controller;
 
 use App\Entity\Article;
+use App\Entity\Category;
 use App\Entity\OnSale;
 use App\Form\ArticleForm;
 use App\Repository\ArticleRepository;
+use App\Repository\CategoryRepository;
 use App\Repository\OnSaleRepository;
-use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use phpDocumentor\Reflection\PseudoTypes\True_;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -19,7 +20,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class ArticleController extends AbstractController
 {
     public function __construct(
-        private UserRepository $categoryRepository,
+        private CategoryRepository $categoryRepository,
         private ArticleRepository $articleRepository,
         private OnSaleRepository $onSaleRepository,
         private Security $security
@@ -91,7 +92,6 @@ class ArticleController extends AbstractController
         ]);
     }
 
-    #[IsGranted('ROLE_ADMIN')]
     #[Route('/delete/article/{id}', name: 'delete_article')]
     public function delete(int $id)
     {

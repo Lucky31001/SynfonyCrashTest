@@ -6,6 +6,8 @@ use App\Form\FilterType;
 use App\Repository\ArticleRepository;
 use App\Repository\CategoryRepository;
 use App\Repository\MoneyRepository;
+use App\Repository\NotificationRepository;
+use App\Repository\OnSaleRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
@@ -19,7 +21,9 @@ class CatalogController extends AbstractController
         private ArticleRepository $articleRepository,
         private Security $security,
         private CategoryRepository $categoryRepository,
-        private MoneyRepository $moneyRepository
+        private MoneyRepository $moneyRepository,
+        private OnSaleRepository $onSaleRepository,
+        private NotificationRepository $notificationRepository
     ) {
     }
     #[Route('/', name: 'catalog')]
@@ -42,12 +46,23 @@ class CatalogController extends AbstractController
             $moneyAccount = $money->getAccount();
         }
 
+        $canDelete = [];
+        foreach ($articles as $article) {
+            $user = $this->security->getUser();
+            $onsale = $this->onSaleRepository->findOneBy(['article' => $article, 'user' => $user]);
+            $canDelete[] = (bool)$onsale;
+        }
+
+        $NewNotification = $this->notificationRepository->count(['user' => $user, 'isRead' => false]);
+
         return $this->render('catalog/index.html.twig', [
-            'title_page' => 'Vintud - Catalog',
+            'title_page' => 'Vintud - Catalogue',
             'articles' => $articles,
             'log' => (bool)$user,
             'filter_form' => $filterForm->createView(),
-            'moneyAccount' => $moneyAccount
+            'canDelete' => $canDelete,
+            'moneyAccount' => $moneyAccount,
+            'NewNotification' => $NewNotification,
         ]);
     }
     #[Route('filter/{id}', name: 'filtered_catalog')]
@@ -62,11 +77,27 @@ class CatalogController extends AbstractController
 
         $user = $this->security->getUser();
         $articles = $this->articleRepository->findBy(['category' => $id]);
+
+        $canDelete = [];
+        foreach ($articles as $article) {
+            $user = $this->security->getUser();
+            $onsale = $this->onSaleRepository->findOneBy(['article' => $article, 'user' => $user]);
+            $canDelete[] = (bool)$onsale;
+        }
+
+        $moneyAccount = 0;
+        if ($user) {
+            $money = $this->moneyRepository->findOneBy(['user' => $user]);
+            $moneyAccount = $money->getAccount();
+        }
+
         return $this->render('catalog/filteredArticle.html.twig', [
             'title_page' => 'Vintud - Catalogue',
             'articles' => $articles,
             'log' => (bool)$user,
             'filter_form' => $filterForm->createView(),
+            'canDelete' => $canDelete,
+            'moneyAccount' => $moneyAccount,
         ]);
     }
 }

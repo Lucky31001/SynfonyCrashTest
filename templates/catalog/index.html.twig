@@ -16,7 +16,7 @@
         <div class="catalog-grid">
             {% for article in articles %}
                 {% if article.show %}
-                    {% include 'components/article_card/index.html.twig' with { 'article': article, 'loop': loop } %}
+                    {% include 'components/article_card/index.html.twig' with { 'article': article, 'loop': loop, 'canDelete': canDelete } %}
                 {% endif %}
             {% endfor %}
         </div>

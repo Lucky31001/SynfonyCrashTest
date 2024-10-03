@@ -1,45 +1,39 @@
 {% include 'components/article_card/style.html.twig' %}
-
 <div class="catalog-content-item">
   <a href="{{ path('show_article', {'id': article.id}) }}" class="catalog-item">
     <img
       src="{{ article.image }}"
       class="catalog-item-image"
-    />
+     alt="image non chargee"/>
     <div class="catalog-item-content">
       <h2 class="catalog-item-title">
         {{ article.title }}
       </h2>
       <p class="catalog-item-description">{{ article.content }}</p>
       <div class="catalog-item-details">
-        <span class="catalog-item-price">{{ article.price }} €</span>
+        <span class="catalog-item-price">{{ article.price + (article.tva * article.price)/100 }} €</span>
         <div class="catalog-item-fav-content">
-          {% set max_fav = 5 %} 
-          {% for i in 0..(max_fav - 1) %}
-            {% if i < article.fav %}
-              <span class="catalog-item-fav">
-                <i data-lucide="star" class="fav-icon"></i>
-              </span>
-            {% else %}
+            <a href="{{ path('app_favorite_add', {'article_id': article.id}) }}">
               <span class="catalog-item-fav">
                  <i data-lucide="star"></i>
               </span>
-            {% endif %}
-          {% endfor %}
+            </a>
         </div>
       </div>
     </div>
     <span class="catalog-item-number">{{ loop.index }}</span>
   </a>
   {% if log %}
-    <div class="action-links-content">
-        <a href="{{ path('modif_article', {'id': article.id}) }}" class="action-links modifier">
-          <i data-lucide="pencil"></i>
-        </a>
-        <a href="{{ path('delete_article', {'id': article.id}) }}" class="action-links supprimer">
-          <i data-lucide="trash-2"></i>
-        </a>
+      {% if canDelete[loop.index - 1] %}
+        <div class="action-links-content">
+            <a href="{{ path('modif_article', {'id': article.id}) }}" class="action-links modifier">
+                <i data-lucide="pencil"></i>
+            </a>
+            <a href="{{ path('delete_article', {'id': article.id}) }}" class="action-links supprimer">
+                <i data-lucide="trash-2"></i>
+            </a>
     </div>
+      {% endif %}
   {% endif %}
 </div>
 

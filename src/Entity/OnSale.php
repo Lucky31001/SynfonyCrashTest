@@ -15,7 +15,7 @@ class OnSale
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\ManyToOne(targetEntity: Article::class, cascade: ['persist'])]
+    #[ORM\ManyToOne(targetEntity: Article::class, cascade: ['remove'])]
     #[ORM\JoinColumn(nullable: true)]
     private ?Article $article;
 

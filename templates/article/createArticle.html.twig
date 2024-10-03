@@ -92,7 +92,7 @@
         {{ form_label(form.category) }}
         {{ form_widget(form.category) }}
     </div>
-    {{ button_label|default( 'Save' )}}
+    <button type="submit">Create</button>
     {{ form_end(form) }}
 
     <a href="{{ path('catalog') }}">Catalogue</a>

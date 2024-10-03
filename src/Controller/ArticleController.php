@@ -93,9 +93,8 @@ class ArticleController extends AbstractController
     #[Route('/delete/article/{id}', name: 'delete_article')]
     public function delete(int $id)
     {
-        $article = $this->articleRepository->find($id);
-        $this->articleRepository->delete($article);
-        $articles = $this->articleRepository->findAll();
+        $article = $this->onSaleRepository->findBy(['article' => $id])[0];
+        $this->onSaleRepository->delete($article);
         return $this->redirectToRoute('catalog');
     }
 

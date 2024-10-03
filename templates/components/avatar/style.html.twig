@@ -1,0 +1,80 @@
+<style>
+  .avatar-container {
+    position: relative;
+    display: flex;
+    align-items: end;
+    justify-content: end;
+  }
+
+  .avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-color: #dcdcdc;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 32px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 6px var(--shadow-color);
+  }
+
+  .avatar:hover,
+  .avatar:focus {
+    transform: scale(1.05);
+    box-shadow: 0 6px 8px var(--shadow-color);
+  }
+
+  .avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+  }
+
+  .menu {
+    margin-top: 5px;
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background-color: white;
+    border-radius: 8px;
+    border: solid 1px #dcdcdc;
+    box-shadow: 0 4px 12px var(--shadow-color);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(10px);
+    transition: all 0.3s ease;
+    overflow: hidden;
+    z-index: 10;
+    width: 150px;
+  }
+
+  .avatar-container:hover .menu,
+  .avatar-container:focus-within .menu {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+  }
+
+  .menu-item {
+    color: #000;
+    padding: 12px 20px;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    transition: background-color 0.2s ease;
+  }
+
+  .menu-item:hover,
+  .menu-item:focus {
+    background-color: #f1eeee;
+    outline: none;
+  }
+  .logout {
+    background: #fff9f9;
+    border-top: solid 1px #000;
+  }
+</style>

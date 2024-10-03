@@ -9,6 +9,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use App\Repository\MoneyRepository;
+
 
 class OnSaleController extends AbstractController
 {
@@ -16,7 +18,9 @@ class OnSaleController extends AbstractController
         private Security $security,
         private UserRepository $userRepository,
         private OnSaleRepository $onSaleRepository,
-        private ArticleRepository $articleRepository
+        private ArticleRepository $articleRepository,
+        private MoneyRepository $moneyRepository
+
     ) {
     }
     /*
@@ -33,10 +37,14 @@ class OnSaleController extends AbstractController
             $tab[] = $sale->getArticle();
         }
 
+        $money = $this->moneyRepository->findOneBy(['user' => $user]);
+        $moneyAccount = $money->getAccount();
+
         return $this->render('on_sale/index.html.twig', [
             'title_page' => 'Vintud - On Sale',
             'onSale' => $tab,
-            'log' => (bool)$user
+            'log' => (bool)$user,
+            'moneyAccount' => $moneyAccount
         ]);
     }
 }

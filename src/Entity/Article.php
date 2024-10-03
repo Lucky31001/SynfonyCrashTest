@@ -37,6 +37,9 @@ class Article
     #[ORM\JoinColumn(nullable: true)]
     private ?Category $category;
 
+    #[ORM\Column]
+    private ?bool $show = null;
+
     public function __construct()
     {
         $this->setFav(0);
@@ -120,5 +123,17 @@ class Article
     public function setCategory(?Category $category): void
     {
         $this->category = $category;
+    }
+
+    public function isShow(): ?bool
+    {
+        return $this->show;
+    }
+
+    public function setShow(bool $show): static
+    {
+        $this->show = $show;
+
+        return $this;
     }
 }

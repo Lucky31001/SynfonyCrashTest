@@ -6,6 +6,7 @@ use App\Form\FilterType;
 use App\Repository\ArticleRepository;
 use App\Repository\CategoryRepository;
 use App\Repository\MoneyRepository;
+use App\Repository\OnSaleRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
@@ -19,7 +20,8 @@ class CatalogController extends AbstractController
         private ArticleRepository $articleRepository,
         private Security $security,
         private CategoryRepository $categoryRepository,
-        private MoneyRepository $moneyRepository
+        private MoneyRepository $moneyRepository,
+        private OnSaleRepository $onSaleRepository,
     ) {
     }
     #[Route('/', name: 'catalog')]
@@ -36,10 +38,23 @@ class CatalogController extends AbstractController
         $user = $this->security->getUser();
         $articles = $this->articleRepository->findAll();
 
+        $money = $this->moneyRepository->findOneBy(['user_id' => $user]);
+        $moneyAccount = $money->getAccount();
+
+        $this->moneyRepository->save($money);
+
         $moneyAccount = 0;
         if ($user) {
             $money = $this->moneyRepository->findOneBy(['user' => $user]);
             $moneyAccount = $money->getAccount();
+        }
+
+
+
+        foreach ($articles as $article) {
+            $user = $this->security->getUser();
+            $onsale = $this->onSaleRepository->findOneBy(['article' => $article, 'user' => $user]);
+            $canDelete[] = (bool)$onsale;
         }
 
         return $this->render('catalog/index.html.twig', [
@@ -47,6 +62,7 @@ class CatalogController extends AbstractController
             'articles' => $articles,
             'log' => (bool)$user,
             'filter_form' => $filterForm->createView(),
+            'canDelete' => $canDelete,
             'moneyAccount' => $moneyAccount
         ]);
     }

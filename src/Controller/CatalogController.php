@@ -72,11 +72,27 @@ class CatalogController extends AbstractController
 
         $user = $this->security->getUser();
         $articles = $this->articleRepository->findBy(['category' => $id]);
+
+        $canDelete = [];
+        foreach ($articles as $article) {
+            $user = $this->security->getUser();
+            $onsale = $this->onSaleRepository->findOneBy(['article' => $article, 'user' => $user]);
+            $canDelete[] = (bool)$onsale;
+        }
+
+        $moneyAccount = 0;
+        if ($user) {
+            $money = $this->moneyRepository->findOneBy(['user' => $user]);
+            $moneyAccount = $money->getAccount();
+        }
+
         return $this->render('catalog/filteredArticle.html.twig', [
             'title_page' => 'Vintud - Catalogue',
             'articles' => $articles,
             'log' => (bool)$user,
             'filter_form' => $filterForm->createView(),
+            'canDelete' => $canDelete,
+            'moneyAccount' => $moneyAccount,
         ]);
     }
 }

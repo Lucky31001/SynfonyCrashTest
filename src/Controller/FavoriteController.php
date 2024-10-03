@@ -9,6 +9,7 @@ use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
@@ -24,8 +25,10 @@ class FavoriteController extends AbstractController
     #[Route('/favorite/add/{article_id}', name: 'app_favorite_add')]
     public function index(
         int $article_id,
-        EntityManagerInterface $entityManager
+        EntityManagerInterface $entityManager,
+        Request $request,
     ): Response {
+        $referer = $request->headers->get('referer');
         $favorite = new Favorite();
         $user = $this->security->getUser();
         $favorite->setUserId($user);
@@ -39,6 +42,6 @@ class FavoriteController extends AbstractController
         } else {
             $this->favoriteRepository->delete($check_existing);
         }
-        return $this->redirectToRoute('catalog');
+        return $this->redirect($referer);
     }
 }

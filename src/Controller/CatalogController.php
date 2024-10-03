@@ -5,8 +5,8 @@ namespace App\Controller;
 use App\Form\FilterType;
 use App\Repository\ArticleRepository;
 use App\Repository\CategoryRepository;
+use App\Repository\MoneyRepository;
 use App\Repository\OnSaleRepository;
-use App\Service\CalculService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
@@ -20,6 +20,7 @@ class CatalogController extends AbstractController
         private ArticleRepository $articleRepository,
         private Security $security,
         private CategoryRepository $categoryRepository,
+        private MoneyRepository $moneyRepository,
         private OnSaleRepository $onSaleRepository,
     ) {
     }
@@ -37,6 +38,12 @@ class CatalogController extends AbstractController
         $user = $this->security->getUser();
         $articles = $this->articleRepository->findAll();
 
+        $money = $this->moneyRepository->findOneBy(['user_id' => $user]);
+        $moneyAccount = $money->getAccount();
+
+        $this->moneyRepository->save($money);
+
+
         foreach ($articles as $article) {
             $user = $this->security->getUser();
             $onsale = $this->onSaleRepository->findOneBy(['article' => $article, 'user' => $user]);
@@ -48,6 +55,7 @@ class CatalogController extends AbstractController
             'log' => (bool)$user,
             'filter_form' => $filterForm->createView(),
             'canDelete' => $canDelete,
+            'moneyAccount' => $moneyAccount
         ]);
     }
     #[Route('filter/{id}', name: 'filtered_catalog')]

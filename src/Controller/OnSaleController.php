@@ -27,13 +27,16 @@ class OnSaleController extends AbstractController
     {
         $user = $this->userRepository->findOneBy(['email' => $this->security->getUser()->getUserIdentifier()]);
         $onSale = $this->onSaleRepository->findByUserWithArticles($user);
+        $tab = [];
+        $user = $this->security->getUser();
         foreach ($onSale as $sale) {
             $tab[] = $sale->getArticle();
         }
 
         return $this->render('on_sale/index.html.twig', [
-            'controller_name' => 'OnSaleController',
-            'onSale' => $tab
+            'title_page' => 'Vintud - On Sale',
+            'onSale' => $tab,
+            'log' => (bool)$user
         ]);
     }
 }

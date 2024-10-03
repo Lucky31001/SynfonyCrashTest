@@ -37,7 +37,7 @@ class RegistrationController extends AbstractController
             $user->setPassword($userPasswordHasher->hashPassword($user, $plainPassword));
             $user->setEmail(strtolower($form->get('email')->getData()));
             $this->userRepository->save($user);
-            
+
             $money = new Money();
             $money->setAccount(0);
             $money->setUser($user);

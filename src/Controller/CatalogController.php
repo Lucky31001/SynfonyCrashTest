@@ -20,7 +20,6 @@ class CatalogController extends AbstractController
         private Security $security,
         private CategoryRepository $categoryRepository,
         private MoneyRepository $moneyRepository
-
     ) {
     }
     #[Route('/', name: 'catalog')]
@@ -41,7 +40,7 @@ class CatalogController extends AbstractController
         if ($user) {
             $money = $this->moneyRepository->findOneBy(['user' => $user]);
             $moneyAccount = $money->getAccount();
-        }        
+        }
 
         return $this->render('catalog/index.html.twig', [
             'title_page' => 'Vintud - Catalog',

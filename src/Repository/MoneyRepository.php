@@ -31,5 +31,4 @@ class MoneyRepository extends ServiceEntityRepository
         $em->remove($category);
         $em->flush();
     }
-
 }

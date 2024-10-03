@@ -1,4 +1,8 @@
-<!DOCTYPE html>
+{% extends 'base.html.twig' %}
+
+{% block title %}Article créé{% endblock %}
+
+{% block body %}
 <style>
     /* public/css/styles.css */
     body {
@@ -41,11 +45,10 @@
         background-color: #004d40;
     }
 </style>
-{% block body %}
     <div class="container">
         <h1>Article créé</h1>
         <a href="{{ path('create_article') }}">Créé un nouveau article</a>
         <a href="{{ path('catalog') }}">Catalogue</a>
-        <a href="{{ path('hello_world') }}">Home</a>
+        <a href="{{ path('catalog') }}">Home</a>
     </div>
 {% endblock %}

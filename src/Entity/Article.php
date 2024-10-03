@@ -4,10 +4,9 @@ namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
 use App\Repository\ArticleRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Bridge\Doctrine\IdGenerator\UuidGenerator;
-use Symfony\Bridge\Doctrine\Types\UuidType;
-use Symfony\Component\Uid\Uuid;
 
 #[ORM\Entity(repositoryClass: ArticleRepository::class)]
 #[ApiResource]
@@ -24,7 +23,7 @@ class Article
     #[ORM\Column(type: 'string', length: 1024, nullable: true)]
     private string $content;
 
-    #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    #[ORM\Column(type: 'string', length: 1024, nullable: true)]
     private string $image;
 
     #[ORM\Column(type: 'integer', options: ['default' => 0], nullable: true)]
@@ -33,16 +32,23 @@ class Article
     #[ORM\Column(type: 'integer')]
     private int $price;
 
-    #[ORM\Column(type: 'integer')]
+    #[ORM\Column(type: 'integer', options: ['default' => 20])]
     private int $tva;
 
     #[ORM\ManyToOne(targetEntity: Category::class, cascade: ['persist'])]
     #[ORM\JoinColumn(nullable: true)]
     private ?Category $category;
 
+    /**
+     * @var Collection<int, Favorite>
+     */
+    #[ORM\OneToMany(targetEntity: Favorite::class, mappedBy: 'aritcle_id')]
+    private Collection $favorites;
+
     public function __construct()
     {
         $this->setFav(0);
+        $this->favorites = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -125,4 +131,33 @@ class Article
         $this->category = $category;
     }
 
+    /**
+     * @return Collection<int, Favorite>
+     */
+    public function getFavorites(): Collection
+    {
+        return $this->favorites;
+    }
+
+    public function addFavorite(Favorite $favorite): static
+    {
+        if (!$this->favorites->contains($favorite)) {
+            $this->favorites->add($favorite);
+            $favorite->setAritcleId($this);
+        }
+
+        return $this;
+    }
+
+    public function removeFavorite(Favorite $favorite): static
+    {
+        if ($this->favorites->removeElement($favorite)) {
+            // set the owning side to null (unless already changed)
+            if ($favorite->getAritcleId() === $this) {
+                $favorite->setAritcleId(null);
+            }
+        }
+
+        return $this;
+    }
 }

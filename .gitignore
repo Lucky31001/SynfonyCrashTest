@@ -23,3 +23,8 @@ var/
 /public/assets/
 /assets/vendor/
 ###< symfony/asset-mapper ###
+
+###> squizlabs/php_codesniffer ###
+/.phpcs-cache
+/phpcs.xml
+###< squizlabs/php_codesniffer ###

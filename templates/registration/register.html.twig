@@ -1,0 +1,65 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Register{% endblock %}
+
+{% block body %}
+    {% include 'registration/style.html.twig' %}
+    <div class="container-register">
+        <h1>Register</h1>
+
+        {{ form_errors(registrationForm, {'attr': {'class': 'alert alert-danger'}}) }}
+
+        {{ form_start(registrationForm, {'attr': {'class': 'form-registration'}}) }}
+
+            <div class="form-group">
+                {{ form_row(registrationForm.email, {
+                    attr: {'class': 'form-control', 'placeholder': 'Email'}
+                }) }}
+            </div>
+
+            <div class="form-group">
+
+                {{ form_row(registrationForm.plainPassword, {
+                    label: 'Password',
+                    attr: {
+                        'class': 'form-control',
+                        'placeholder': 'Password',
+                        'id': 'password'
+                    }
+                }) }}
+                <button type="button" id="togglePassword" class="btn-toggle-password">
+                    <i data-lucide="eye" id="show"></i>
+                </button>
+            </div>
+            <div class="form-group form-group-pass">
+                {{ form_row(registrationForm.agreeTerms, {
+                    attr: {'class': 'form-check-input'}
+                }) }}
+            </div>
+            <div class="btn-register-container">
+                <button type="submit" class="btn-register">Register</button>
+            </div>
+            <a href="{{ path('app_login') }}" class="btn btn-link">Login</a>
+        {{ form_end(registrationForm) }}
+        <a href="{{ path('catalog') }}" class="btn btn-link">Back to home</a>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var toggleBtn = document.getElementById('togglePassword');
+            var passwordInput = document.getElementById('registration_form_plainPassword');
+
+            toggleBtn.addEventListener('click', function() {
+                var eyeIcon = document.getElementById('show');
+
+                if (passwordInput.type === 'password') {
+                    passwordInput.type = 'text';
+                    eyeIcon.setAttribute('data-lucide', 'eye-off');
+                } else {
+                    passwordInput.type = 'password';
+                    eyeIcon.setAttribute('data-lucide', 'eye');
+                }
+                lucide.createIcons(); // Re-initialize Lucide icons
+            });
+        });
+    </script>
+{% endblock %}

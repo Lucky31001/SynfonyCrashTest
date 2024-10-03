@@ -1,0 +1,102 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello NotificationController!{% endblock %}
+
+{% block body %}
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+        }
+
+        .example-wrapper {
+            margin: 20px auto;
+            max-width: 800px;
+            width: 95%;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #333;
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        p {
+            color: #666;
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+
+        .notification {
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .notification:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .notification p {
+            color: #333;
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+
+        .notification a {
+            display: inline-block;
+            margin: 10px 0;
+            padding: 10px 15px;
+            background-color: #00796b;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        .notification a:hover {
+            background-color: #0056b3;
+        }
+
+        .example-wrapper a {
+            display: inline-block;
+            margin: 10px 0;
+            padding: 10px 15px;
+            background-color: #00796b;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        .example-wrapper a:hover {
+            background-color: #0056b3;
+        }
+    </style>
+<div class="example-wrapper">
+{#    {% include 'components/navbar/index.html.twig' %}#}
+    {% for notification in notifications  %}
+        <div class="notification">
+            <p>{{ notification.message }}</p>
+            <p>{{ notification.createdAt|date('d/m/Y H:i') }}</p>
+            {% if not notification.isRead %}
+            <a href="{{ path('notification_read', {'id': notification.id}) }}">Marquer comme non lu</a>
+            {% else %}
+                <p>Lu</p>
+            {% endif %}
+        </div>
+    {% endfor %}
+    <a href="{{ path('catalog') }}">Catalogue</a>
+</div>
+{% endblock %}

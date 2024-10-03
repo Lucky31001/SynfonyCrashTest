@@ -1,52 +1,53 @@
-<!DOCTYPE html>
+{% extends 'base.html.twig' %}
 
-<style>
-    /* public/css/styles.css */
-    body {
-        font-family: 'Helvetica Neue', sans-serif;
-        background-color: #e0f7fa;
-        margin: 0;
-        padding: 0;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100vh;
-    }
+{% block title %}Catégorie créé!{% endblock %}
 
-    .container {
-        background-color: #ffffff;
-        padding: 30px;
-        border-radius: 10px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        text-align: center;
-    }
-
-    h1 {
-        color: #00796b;
-        font-size: 24px;
-        margin-bottom: 20px;
-    }
-
-    a {
-        display: inline-block;
-        margin: 10px 0;
-        padding: 12px 25px;
-        color: #ffffff;
-        background-color: #00796b;
-        text-decoration: none;
-        border-radius: 5px;
-        transition: background-color 0.3s ease;
-    }
-
-    a:hover {
-        background-color: #004d40;
-    }
-</style>
 {% block body %}
+    <style>
+        /* public/css/styles.css */
+        body {
+            font-family: 'Helvetica Neue', sans-serif;
+            background-color: #e0f7fa;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        h1 {
+            color: #00796b;
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        a {
+            display: inline-block;
+            margin: 10px 0;
+            padding: 12px 25px;
+            color: #ffffff;
+            background-color: #00796b;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        a:hover {
+            background-color: #004d40;
+        }
+    </style>
     <div class="container">
         <h1>Catégorie créé !</h1>
         <a href="{{ path('create_category') }}">Créé une nouvelle catégorie</a>
         <a href="{{ path('list_category') }}">Liste des catégories</a>
-        <a href="{{ path('hello_world') }}">Home</a>
     </div>
 {% endblock %}

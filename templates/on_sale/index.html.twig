@@ -1,0 +1,18 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    {{title_page}}
+{% endblock %}
+
+{% block body %}
+    {% include 'components/navbar/index.html.twig' %}
+    {% include 'catalog/style.html.twig' %}
+    <div class="catalog-container">
+        <h1>Mes articles en vente : </h1>
+        <div class="catalog-grid">
+            {% for article in onSale %}
+                {% include 'components/article_card/index.html.twig' with { 'article': article, 'loop': loop } %}
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

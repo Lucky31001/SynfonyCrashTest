@@ -1,97 +1,22 @@
-<!DOCTYPE html>
+{% extends 'base.html.twig' %}
 
-<title>Hello CatalogController!</title>
+{% block title %}
+    {{title_page}}
+{% endblock %}
 
 {% block body %}
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-            background-color: #f4f4f9;
-        }
-
-        .example-wrapper {
-            margin: 1em auto;
-            max-width: 800px;
-            width: 95%;
-            font: 18px/1.5 sans-serif;
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-
-        .article {
-            background-color: #ffffff;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            margin-bottom: 20px;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            text-decoration: none;
-            color: inherit;
-            display: block;
-        }
-
-        .article:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
-        }
-
-        .article h2 {
-            color: #333;
-            font-size: 20px;
-            margin-bottom: 10px;
-        }
-
-        .article img {
-            max-width: 100%;
-            height: auto;
-            border-radius: 5px;
-            margin-bottom: 10px;
-        }
-
-        .article p {
-            color: #333333;
-            font-size: 16px;
-            margin-bottom: 10px;
-        }
-
-        .example-wrapper a {
-            display: inline-block;
-            margin: 10px 0;
-            padding: 10px 15px;
-            background-color: #00796b;
-            color: #333333;
-            text-decoration: none;
-            border-radius: 5px;
-            transition: background-color 0.3s ease;
-        }
-
-        .example-wrapper a:hover {
-            background-color: #0056b3;
-        }
-    </style>
-
-    <div class="example-wrapper">
+    {% include 'components/navbar/index.html.twig' %}
+    {% include 'catalog/style.html.twig' %}
+    <div class="catalog-container">
+        {{ form_start(filter_form) }}
+        {{ form_widget(filter_form.name) }}
+        <button type="submit">Filtrer</button>
+        {{ form_end(filter_form) }}
         <h1>Catalogue</h1>
-        {% for article in articles %}
-            <a href="{{ path('show_article', {'id': article.id}) }}" class="article">
-                {% if article.fav >= 4 %}
-                    <h2>{{ article.title }} 😎</h2>
-                {% elseif article.fav >= 2 %}
-                    <h2>{{ article.title }} 😊</h2>
-                {% else %}
-                    <h2>{{ article.title }}</h2>
-                {% endif %}
-                <img src="{{ article.image }}" alt="Article Image">
-                <p>Prix : {{ article.price + (article.tva * article.price)/100 }}€</p>
-                <p>{{ article.content }}</p>
-            </a>
-                <a href="{{ path('modif_article', {'id': article.id}) }}">Modifier</a>
-                <a href="{{ path('delete_article', {'id': article.id}) }}">Supprimer</a>
-        {% endfor %}
-        <a href="{{ path('create_article') }}">Créé un article</a>
-        <a href="{{ path('hello_world') }}">Home</a>
+        <div class="catalog-grid">
+            {% for article in articles %}
+                {% include 'components/article_card/index.html.twig' with { 'article': article, 'loop': loop, 'canDelete': canDelete } %}
+            {% endfor %}
+        </div>
     </div>
 {% endblock %}

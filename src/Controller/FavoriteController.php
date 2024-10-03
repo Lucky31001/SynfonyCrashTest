@@ -16,9 +16,10 @@ use Symfony\Component\Routing\Attribute\Route;
 class FavoriteController extends AbstractController
 {
     public function __construct(
-        private readonly ArticleRepository      $articleRepository,
+        private readonly ArticleRepository $articleRepository,
         private readonly EntityManagerInterface $entityManager,
-        private readonly FavoriteRepository     $favoriteRepository, private readonly Security $security,
+        private readonly FavoriteRepository $favoriteRepository,
+        private readonly Security $security,
     ) {
     }
 

@@ -39,6 +39,8 @@ class Article
     #[ORM\JoinColumn(nullable: true)]
     private ?Category $category;
 
+    #[ORM\Column]
+    private ?bool $show = null;
     /**
      * @var Collection<int, Favorite>
      */
@@ -48,6 +50,7 @@ class Article
     public function __construct()
     {
         $this->setFav(0);
+        $this->setShow(1);
         $this->favorites = new ArrayCollection();
     }
 
@@ -131,6 +134,15 @@ class Article
         $this->category = $category;
     }
 
+    public function isShow(): ?bool
+    {
+        return $this->show;
+    }
+
+    public function setShow(bool $show): static
+    {
+        $this->show = $show;
+    }
     /**
      * @return Collection<int, Favorite>
      */

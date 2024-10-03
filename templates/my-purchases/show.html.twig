@@ -1,0 +1,58 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}my purchases{% endblock %}
+
+{% block body %}
+    {% include 'components/navbar/index.html.twig' %}
+    
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        .container {
+            padding: 150px 0 0 0;
+            display: flex;
+            justify-content: center;
+        }
+
+        .article-list {
+            list-style: none;
+            padding: 0 15px;
+            width: 100%;
+        }
+
+        .article-item {
+            padding: 15px;
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .article-title {
+            font-weight: bold;
+        }
+
+        .article-price {
+            color: #333;
+        }
+    </style>
+
+    <div class="container">
+        {% if articles is not empty %}
+            <ul class="article-list">
+                {% for article in articles %}
+                    <li class="article-item">
+                        <h3 class="article-title">{{ article.title }}</h3> 
+                        <p class="article-price"> - {{ article.ttc }} €</p>
+                    </li>
+                {% endfor %}
+            </ul>            
+        {% else %}
+            <p>Tu n'as rien à acheter.</p>
+        {% endif %}
+    </div>
+{% endblock %}

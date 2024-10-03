@@ -109,6 +109,10 @@
             <div class="price">
                 <p>Prix : {{ article.price + (article.tva * article.price)/100 }}€</p>
             </div>
+            {{message}}
+            <a href="{{ path('buy_article', {'id': article.id}) }}" class="back">
+                acheter article
+            </a>
         </div>
         <a href="{{ path('catalog') }}" class="back">Retour au catalogue</a>
     </div>

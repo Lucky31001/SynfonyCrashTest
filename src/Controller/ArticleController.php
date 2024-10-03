@@ -10,6 +10,7 @@ use App\Repository\ArticleRepository;
 use App\Repository\CategoryRepository;
 use App\Repository\OnSaleRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use phpDocumentor\Reflection\PseudoTypes\True_;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
@@ -40,6 +41,7 @@ class ArticleController extends AbstractController
             }
             $article->setPrice($form->get('price')->getData());
             $article->setTva(20);
+            $article->setShow(1);
             $article->setCategory($form->get('category')->getData());
             $this->articleRepository->save($article);
 
@@ -104,6 +106,7 @@ class ArticleController extends AbstractController
         return $this->render('article/show.html.twig', [
             'controller_name' => 'ItemController',
             'article' => $this->articleRepository->find($id),
+            'message' => null
         ]);
     }
 }

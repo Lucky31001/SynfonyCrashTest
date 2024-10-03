@@ -15,7 +15,9 @@
         <h1>Catalogue</h1>
         <div class="catalog-grid">
             {% for article in articles %}
-                {% include 'components/article_card/index.html.twig' with { 'article': article, 'loop': loop, 'canDelete': canDelete } %}
+                {% if article.show %}
+                    {% include 'components/article_card/index.html.twig' with { 'article': article, 'loop': loop, 'canDelete': canDelete } %}
+                {% endif %}
             {% endfor %}
         </div>
     </div>

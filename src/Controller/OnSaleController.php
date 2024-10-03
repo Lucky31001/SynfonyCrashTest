@@ -11,6 +11,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use App\Repository\MoneyRepository;
 
 class OnSaleController extends AbstractController
 {
@@ -43,6 +44,9 @@ class OnSaleController extends AbstractController
         $moneyAccount = $money->getAccount();
 
         $NewNotification = $this->notificationRepository->count(['user' => $user, 'isRead' => false]);
+
+        $money = $this->moneyRepository->findOneBy(['user' => $user]);
+        $moneyAccount = $money->getAccount();
 
         return $this->render('on_sale/index.html.twig', [
             'title_page' => 'Vintud - On Sale',

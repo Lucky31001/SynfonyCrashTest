@@ -50,11 +50,13 @@ class CatalogController extends AbstractController
         }
 
 
+
         foreach ($articles as $article) {
             $user = $this->security->getUser();
             $onsale = $this->onSaleRepository->findOneBy(['article' => $article, 'user' => $user]);
             $canDelete[] = (bool)$onsale;
         }
+      
         return $this->render('catalog/index.html.twig', [
             'title_page' => 'Vintud - Catalog',
             'articles' => $articles,

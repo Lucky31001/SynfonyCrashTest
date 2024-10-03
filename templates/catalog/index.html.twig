@@ -7,6 +7,10 @@
 {% block body %}
     {% include 'components/navbar/index.html.twig' %}
     {% include 'catalog/style.html.twig' %}
+    {{ form_start(filter_form) }}
+    {{ form_widget(filter_form.name) }}
+    <button type="submit">Filtrer</button>
+    {{ form_end(filter_form) }}
     <div class="catalog-container">
         <h1>Catalog</h1>
         <div class="catalog-grid">
@@ -14,5 +18,6 @@
                 {% include 'components/article_card/index.html.twig' with { 'article': article, 'loop': loop } %}
             {% endfor %}
         </div>
+
     </div>
 {% endblock %}

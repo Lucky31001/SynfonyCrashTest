@@ -2,14 +2,24 @@
 <html>
     <head>
         <meta charset="UTF-8">
-        <title>{% block title %}Welcome!{% endblock %}</title>
-        <link rel="stylesheet" href="../styles/global.css"/>
+        <title>{% block title %}{% endblock %}</title>
         {% block javascripts %}
             {% block importmap %}{{ importmap('app') }}{% endblock %}
+            <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+            <script>
+                document.addEventListener('DOMContentLoaded', function () {
+                    if (lucide) {
+                        lucide.createIcons();
+                        console.log("Lucide icons created.");
+                    } else {
+                        console.log("Lucide is not defined.");
+                    }
+                });
+            </script>
         {% endblock %}
     </head>
     {% include 'global.html.twig' %}
     <body>
-    {% block body %}{% endblock %}
+        {% block body %}{% endblock %}
     </body>
 </html>

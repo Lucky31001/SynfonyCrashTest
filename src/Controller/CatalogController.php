@@ -56,7 +56,7 @@ class CatalogController extends AbstractController
             $onsale = $this->onSaleRepository->findOneBy(['article' => $article, 'user' => $user]);
             $canDelete[] = (bool)$onsale;
         }
-      
+
         return $this->render('catalog/index.html.twig', [
             'title_page' => 'Vintud - Catalog',
             'articles' => $articles,

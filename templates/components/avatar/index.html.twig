@@ -5,7 +5,7 @@
     <i data-lucide="user" aria-hidden="true"></i>
   </div>
   <nav class="menu" role="menu">
-    <a href="#favorites" class="menu-item" role="menuitem">Mes Favoris</a>
+    <a href="{{ path('app_users_favorite') }}" class="menu-item" role="menuitem">Mes Favoris</a>
     <a href="{{ path('on_sale') }}" class="menu-item" role="menuitem">Mes articles</a>
     <a href="{{ path('app_logout') }}" class="menu-item logout" role="menuitem">Déconnexion</a>
   </nav>

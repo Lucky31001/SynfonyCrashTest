@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Article;
 use App\Form\ArticleForm;
 use App\Form\ModifArticleForm;
+use App\Form\FilterType;
 use App\Repository\ArticleRepository;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -36,8 +37,7 @@ class ArticleController extends AbstractController
             }
             $article->setPrice($form->get('price')->getData());
             $article->setTva(20);
-            $category = $this->categoryRepository->find($form->get('category')->getData()->getId());
-            $article->setCategory($category);
+            $article->setCategory($form->get('category')->getData());
             $this->articleRepository->save($article);
 
             return $this->redirectToRoute('article_success');

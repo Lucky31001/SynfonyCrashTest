@@ -52,7 +52,7 @@ class CatalogController extends AbstractController
         }
 
         return $this->render('catalog/index.html.twig', [
-            'title_page' => 'Vintud - Catalog',
+            'title_page' => 'Vintud - Catalogue',
             'articles' => $articles,
             'log' => (bool)$user,
             'filter_form' => $filterForm->createView(),

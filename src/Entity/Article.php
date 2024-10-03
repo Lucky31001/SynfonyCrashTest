@@ -21,7 +21,7 @@ class Article
     #[ORM\Column(type: 'string', length: 1024, nullable: true)]
     private string $content;
 
-    #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    #[ORM\Column(type: 'string', length: 1024, nullable: true)]
     private string $image;
 
     #[ORM\Column(type: 'integer', options: ['default' => 0], nullable: true)]

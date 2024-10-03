@@ -3,23 +3,28 @@
 namespace App\Controller;
 
 use App\Entity\Article;
+use App\Entity\OnSale;
 use App\Form\ArticleForm;
 use App\Form\ModifArticleForm;
 use App\Form\FilterType;
 use App\Repository\ArticleRepository;
+use App\Form\FilterType;
+use App\Repository\OnSaleRepository;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 class ArticleController extends AbstractController
 {
     public function __construct(
         private UserRepository $categoryRepository,
         private ArticleRepository $articleRepository,
+        private OnSaleRepository $onSaleRepository,
+        private Security $security
     ) {
     }
     #[Route('/create/article/', name: 'create_article')]
@@ -39,6 +44,12 @@ class ArticleController extends AbstractController
             $article->setTva(20);
             $article->setCategory($form->get('category')->getData());
             $this->articleRepository->save($article);
+
+            $user = $this->security->getUser();
+            $onSale = new OnSale();
+            $onSale->setArticle($article);
+            $onSale->setUser($user);
+            $this->onSaleRepository->save($onSale);
 
             return $this->redirectToRoute('article_success');
         }

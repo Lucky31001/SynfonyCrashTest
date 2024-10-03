@@ -2,12 +2,16 @@
 
 <nav>
   <div class="container nav-container">
-    <a href="#" class="logo">Vintud</a>
+    <a href="{{ path('catalog') }}" class="logo">Vintud</a>
     <ul class="nav-links">
     {% if log %}       
       <a href="{{ path('create_article') }}" class="add-article-button">
         <i data-lucide="plus-"></i>
         Ajouter un article
+      </a>
+      <a href="{{ path('create_category') }}" class="add-article-button">
+        <i data-lucide="plus-"></i>
+        Ajouter une catégorie
       </a>
       {% include 'components/avatar/index.html.twig' %} 
     {% else %}

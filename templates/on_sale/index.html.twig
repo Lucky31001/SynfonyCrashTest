@@ -8,14 +8,9 @@
     {% include 'components/navbar/index.html.twig' %}
     {% include 'catalog/style.html.twig' %}
     <div class="catalog-container">
-        {{ form_start(filter_form) }}
-        {{ form_widget(filter_form.name) }}
-        <button type="submit">Filtrer</button>
-        {{ form_end(filter_form) }}
-        <button><a href="{{ path('catalog') }}"> Effacer les filtres</a></button>
-        <h1>Catalogue</h1>
+        <h1>Mes articles en vente : </h1>
         <div class="catalog-grid">
-            {% for article in articles %}
+            {% for article in onSale %}
                 {% include 'components/article_card/index.html.twig' with { 'article': article, 'loop': loop } %}
             {% endfor %}
         </div>

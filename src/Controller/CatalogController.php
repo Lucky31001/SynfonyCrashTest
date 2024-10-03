@@ -41,7 +41,7 @@ class CatalogController extends AbstractController
             'filter_form' => $filterForm->createView(),
         ]);
     }
-    #[Route('/{id}', name: 'filtered_catalog')]
+    #[Route('filter/{id}', name: 'filtered_catalog')]
     public function filterArticle(int $id, Request $request): Response
     {
         $filterForm = $this->createForm(FilterType::class);
@@ -54,7 +54,7 @@ class CatalogController extends AbstractController
         $user = $this->security->getUser();
         $articles = $this->articleRepository->findBy(['category' => $id]);
         return $this->render('catalog/filteredArticle.html.twig', [
-            'controller_name' => 'CatalogController',
+            'title_page' => 'Vintud - Catalogue',
             'articles' => $articles,
             'log' => (bool)$user,
             'filter_form' => $filterForm->createView(),

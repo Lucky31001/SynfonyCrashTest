@@ -19,14 +19,14 @@ class SellRepository extends ServiceEntityRepository
         parent::__construct($registry, Sell::class);
     }
 
-    public function save(Sell $sell): void 
+    public function save(Sell $sell): void
     {
         $em = $this->getEntityManager();
         $em->persist($sell);
         $em->flush();
     }
 
-    public function delete(Sell $sell): void 
+    public function delete(Sell $sell): void
     {
         $em = $this->getEntityManager();
         $em->remove($sell);

@@ -25,10 +25,11 @@ class BuyController extends AbstractController
         private OnSaleRepository $onSaleRepository,
         private Security $security,
         private MoneyRepository $moneyRepository,
-    ) {}
+    ) {
+    }
 
     #[Route('{id}/article/buy/new', name: 'buy_article')]
-    public function index(int $id): Response    
+    public function buy(int $id): Response
     {
         $user = $this->security->getUser();
         $article = $this->articleRepository->find($id);
@@ -43,6 +44,10 @@ class BuyController extends AbstractController
             $moneyOwner = $this->moneyRepository->findOneBy(['user' => $owner]);
 
             $prix = $article->getPrice();
+            $tva = $article->getTva();
+            $ttc = $prix + ($prix * ($tva / 100));
+
+
             $moneyAccount = $money->getAccount();
             $moneyOwnerAccount = $moneyOwner->getAccount();
             $showArticle = $article->isShow();
@@ -52,7 +57,7 @@ class BuyController extends AbstractController
 
             if ($userId === $ownerId) {
                 $message = 'tu ne peux pas acheter ton propre produit';
-            }  else {
+            } else {
                 $message = 'Article déjà vendu';
                 if ($showArticle) {
                     $message = 'pas assez de soldes';
@@ -61,17 +66,26 @@ class BuyController extends AbstractController
                         $buys->setUser($user);
                         $buys->setArticle($article);
 
-                        $money->setAccount($moneyAccount - $prix);
-                        $moneyOwner->setAccount($moneyOwnerAccount + $prix);
+                        $sell = new Sell();
+                        $sell->setUser($user);
+                        $sell->setArticle($article);
+                        $sell->setOwner($owner);
+
+                        $money->setAccount($moneyAccount - $ttc);
+                        $moneyOwner->setAccount($moneyOwnerAccount + $ttc);
+
                         $article->setShow(0);
 
                         $this->buyRepository->save($buys);
+                        $this->sellRepository->save($sell);
+
                         $this->moneyRepository->save($money);
                         $this->moneyRepository->save($moneyOwner);
+
                         $this->articleRepository->save($article);
 
                         $message = 'produit acheté avec succès';
-                    }   
+                    }
                 }
             }
         }
@@ -80,6 +94,82 @@ class BuyController extends AbstractController
             'controller_name' => 'ItemController',
             'article' => $article,
             'message' => $message,
+        ]);
+    }
+
+    #[Route('/my-purchases', name: 'buy_article_show')]
+    public function buyPage(): Response
+    {
+        $user = $this->security->getUser();
+        if (!$user) {
+            return $this->redirectToRoute('app_login');
+        }
+
+
+        $money = $this->moneyRepository->findOneBy(['user' => $user]);
+        $moneyAccount = $money->getAccount();
+
+        $buys = $this->buyRepository->findBy(['user' => $user]);
+
+        $articles = [];
+        if ($buys) {
+            foreach ($buys as $buy) {
+                $article = $buy->getArticle();
+                if ($article) {
+                    $prix = $article->getPrice();
+                    $tva = $article->getTva();
+
+                    $ttc = $prix + ($prix * ($tva / 100));
+
+                    $article->ttc = $ttc;
+                    $articles[] = $article;
+                }
+            }
+        }
+
+        return $this->render('my-purchases/show.html.twig', [
+            'log' => (bool)$user,
+            'moneyAccount' => $moneyAccount,
+            'articles' => $articles
+        ]);
+    }
+
+    #[Route('/my-sell', name: 'sell_article_show')]
+    public function sellPage(): Response
+    {
+        $user = $this->security->getUser();
+        if (!$user) {
+            return $this->redirectToRoute('app_login');
+        }
+
+
+        $money = $this->moneyRepository->findOneBy(['user' => $user]);
+        $moneyAccount = $money->getAccount();
+
+        $buys = $this->sellRepository->findBy(['owner' => $user]);
+
+        $articles = [];
+        if ($buys) {
+            foreach ($buys as $buy) {
+                $article = $buy->getArticle();
+                if ($article) {
+                    $prix = $article->getPrice();
+                    $tva = $article->getTva();
+
+                    $ttc = $prix + ($prix * ($tva / 100));
+
+                    $article->ttc = $ttc;
+                    $articles[] = $article;
+                }
+            }
+        }
+
+
+
+        return $this->render('my-sell/show.html.twig', [
+            'log' => (bool)$user,
+            'moneyAccount' => $moneyAccount,
+            'articles' => $articles
         ]);
     }
 }

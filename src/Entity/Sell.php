@@ -29,7 +29,7 @@ class Sell
     {
         return $this->id;
     }
-    
+
     public function getUser(): ?User
     {
         return $this->user;

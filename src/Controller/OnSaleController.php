@@ -11,7 +11,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use App\Repository\MoneyRepository;
 
-
 class OnSaleController extends AbstractController
 {
     public function __construct(
@@ -20,7 +19,6 @@ class OnSaleController extends AbstractController
         private OnSaleRepository $onSaleRepository,
         private ArticleRepository $articleRepository,
         private MoneyRepository $moneyRepository
-
     ) {
     }
     /*

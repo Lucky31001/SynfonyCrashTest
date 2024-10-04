@@ -28,8 +28,6 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class ArticleController extends AbstractController
 {
-
-
     public function __construct(
         private CategoryRepository $categoryRepository,
         private ArticleRepository $articleRepository,
@@ -139,7 +137,7 @@ class ArticleController extends AbstractController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $conversation = $this->conversationRepository->findOneByUsers($sender, $receiver);
-            if ($sender === $receiver){
+            if ($sender === $receiver) {
                 return $this->redirectToRoute('app_login');
             }
             $content = $form->get('content')->getData();

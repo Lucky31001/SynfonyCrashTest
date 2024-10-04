@@ -20,7 +20,6 @@ use Psr\Log\LoggerInterface;
 
 class MessageService
 {
-
     public function __construct(
         private LoggerInterface $logger,
         private readonly MessageRepository $messageRepository,

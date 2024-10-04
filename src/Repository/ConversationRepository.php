@@ -23,12 +23,12 @@ class ConversationRepository extends ServiceEntityRepository
 
     public function findOneByUsers(User $userOne, User $userTwo): ?Conversation
     {
-         return $this->createQueryBuilder('c')
-             ->where('(c.userOne = :userOne AND c.userTwo = :userTwo) OR (c.userOne = :userTwo AND c.userTwo = :userOne)')
-            ->setParameter('userOne', $userOne)
-             ->setParameter('userTwo', $userTwo)
-            ->getQuery()
-             ->getOneOrNullResult()
+        return $this->createQueryBuilder('c')
+            ->where('(c.userOne = :userOne AND c.userTwo = :userTwo) OR (c.userOne = :userTwo AND c.userTwo = :userOne)')
+           ->setParameter('userOne', $userOne)
+            ->setParameter('userTwo', $userTwo)
+           ->getQuery()
+            ->getOneOrNullResult()
         ;
     }
 

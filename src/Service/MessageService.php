@@ -31,8 +31,9 @@ class MessageService
         private readonly NotificationRepository $notificationRepository
     ) {
     }
-    public function sendMessage(User $receiver, User $sender, Conversation $conversation, Message $message, string $content)
+    public function sendMessage(User $receiver, User $sender, Message $message, string $content)
     {
+        $conversation = $this->conversationRepository->findOneByUsers($sender, $receiver);
         if (!$conversation) {
             $conversation = new Conversation();
             $conversation->setUserOne($sender);
@@ -46,6 +47,7 @@ class MessageService
         $message->setCreatedAt(new \DateTime());
         $this->entityManager->persist($message);
         $this->entityManager->flush();
+        return $conversation;
     }
 
     public function checkReceiver(User $receiver, User $sender, int $conversationId)

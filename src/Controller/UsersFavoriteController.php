@@ -58,7 +58,7 @@ class UsersFavoriteController extends AbstractController
             'log' => (bool)$user,
             'moneyAccount' => $moneyAccount,
             'NewNotification' => $NewNotification,
-            'email' => $user->getEmail(),
+            'email' => (bool)$user ? $user->getEmail() : '',
         ]);
     }
 }

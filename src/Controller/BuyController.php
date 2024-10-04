@@ -177,7 +177,7 @@ class BuyController extends AbstractController
             'articles' => $articles,
             'canDelete' => $canDelete,
             'NewNotification' => $NewNotification,
-            'email' => $user->getEmail(),
+            'email' => (bool)$user ? $user->getEmail() : '',
         ]);
     }
 
@@ -226,7 +226,8 @@ class BuyController extends AbstractController
             'moneyAccount' => $moneyAccount,
             'articles' => $articles,
             'canDelete' => $canDelete,
-            'NewNotification' => $NewNotification
+            'NewNotification' => $NewNotification,
+            'email' => (bool)$user ? $user->getEmail() : '',
         ]);
     }
 
@@ -273,7 +274,9 @@ class BuyController extends AbstractController
             'moneyAccount' => $moneyAccount,
             'articles' => $articles,
             'canDelete' => $canDelete,
-            'NewNotification' => $NewNotification
+            'NewNotification' => $NewNotification,
+            'email' => (bool)$user ? $user->getEmail() : '',
+
         ]);
 
         // Instantiate mPDF

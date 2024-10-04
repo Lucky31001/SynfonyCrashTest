@@ -12,13 +12,14 @@
             <strong>{{ message.sender.email}}:</strong> {{ message.content }} ({{ message.createdAt|date('Y-m-d H:i') }})
         </li>
     {% endfor %}
-        <li>
-            {{ form_start(form) }}
-            {{ form(form) }}
-            <button type="submit">Envoyer</button>
-            {{ form_end(form) }}
-        </li>
 </ul>
-
+    <div>
+        {{ form_start(form_message) }}
+        <div>
+          {{ form_widget(form_message.content) }}
+        </div>
+        <button type="submit">Envoyer message</button>
+    {{ form_end(form_message) }}
+    </div>
 
 {% endblock %}

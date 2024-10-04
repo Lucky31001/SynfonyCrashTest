@@ -4,11 +4,19 @@ namespace App\Controller;
 
 use App\Entity\Article;
 use App\Entity\Category;
+use App\Entity\Conversation;
+use App\Entity\Message;
 use App\Entity\OnSale;
 use App\Form\ArticleForm;
+use App\Form\MessageType;
 use App\Repository\ArticleRepository;
 use App\Repository\CategoryRepository;
+use App\Repository\ConversationRepository;
+use App\Repository\MessageRepository;
+use App\Repository\MoneyRepository;
+use App\Repository\NotificationRepository;
 use App\Repository\OnSaleRepository;
+use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use phpDocumentor\Reflection\PseudoTypes\True_;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -23,7 +31,13 @@ class ArticleController extends AbstractController
         private CategoryRepository $categoryRepository,
         private ArticleRepository $articleRepository,
         private OnSaleRepository $onSaleRepository,
-        private Security $security
+        private Security $security,
+        private UserRepository $userRepository,
+        private ConversationRepository $conversationRepository,
+        private MoneyRepository $moneyRepository,
+        private EntityManagerInterface $entityManager,
+        private NotificationRepository $notificationRepository,
+        private MessageRepository $messageRepository
     ) {
     }
     #[Route('/create/article/', name: 'create_article')]
@@ -101,12 +115,51 @@ class ArticleController extends AbstractController
     }
 
     #[Route('/{id}/article', name: 'show_article')]
-    public function show(int $id): Response
+    public function show(int $id, Request $request): Response
     {
+
+        $user = $this->security->getUser();
+        $sender = $this->userRepository->find($user);
+        $receiver = $this->userRepository->find($this->onSaleRepository->find($this->articleRepository->findOneById($id)));
+        $conversation = $this->conversationRepository->findOneByUsers($sender, $receiver);
+        $NewNotification = $this->notificationRepository->count(['user' => $user, 'isRead' => false]);
+        $messages = $this->messageRepository->findBy(['conversation' => $conversation]);
+
+        if (!$user) {
+            return $this->redirectToRoute('app_login');
+        } else {
+            $money = $this->moneyRepository->findOneBy(['user' => $user]);
+            $moneyAccount = $money->getAccount();
+        }
+
+        if (!$conversation) {
+            $conversation = new Conversation();
+            $conversation->setUserOne($sender);
+            $conversation->setUserTwo($receiver);
+            $this->entityManager->persist($conversation);
+        }
+
+        $message = new Message();
+        $form = $this->createForm(MessageType::class, $message);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $message->setContent($form->get('content')->getData());
+            $message->setConversation($conversation);
+            $message->setSender($sender);
+            $message->setReceiver($receiver);
+            $message->setCreatedAt(new \DateTime());
+            $this->entityManager->persist($message);
+            $this->entityManager->flush();
+            return $this->redirectToRoute('conversation_show', ['conversationId' => $conversation->getId()]);
+        }
+
         return $this->render('article/show.html.twig', [
             'controller_name' => 'ItemController',
             'article' => $this->articleRepository->find($id),
-            'message' => null
+            'message' => null,
+            'new_conv' => $form,
+            'NewNotification' => $NewNotification,
+            'moneyAccount' => $moneyAccount,
         ]);
     }
 }

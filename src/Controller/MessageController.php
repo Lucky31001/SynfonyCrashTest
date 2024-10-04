@@ -29,12 +29,16 @@ class MessageController extends AbstractController
         private readonly NotificationRepository $notificationRepository
     ) {
     }
-    #[Route('/message/send/{receiverId}', name: 'message_send')]
-    public function sendMessage(int $receiverId, Request $request): Response
+
+    #[Route('/conversation/{conversationId}', name: 'conversation_show')]
+    public function showConversation(Request $request, int $conversationId): Response
     {
         $user = $this->security->getUser();
         $sender = $this->userRepository->find($user);
-        $receiver = $this->userRepository->find($receiverId);
+        $receiver = $this->conversationRepository->findOneById($conversationId)->getUserTwo();
+        if ($sender === $receiver) {
+            $receiver = $this->conversationRepository->findOneById($conversationId)->getUserOne();
+        }
         $conversation = $this->conversationRepository->findOneByUsers($sender, $receiver);
 
         if (!$user) {
@@ -67,30 +71,15 @@ class MessageController extends AbstractController
         }
         $NewNotification = $this->notificationRepository->count(['user' => $user, 'isRead' => false]);
         $messages = $this->messageRepository->findBy(['conversation' => $conversation]);
-        return $this->render('message/index.html.twig', [
-            'title_page' => 'Vintud - Messagerie',
-            'log' => (bool)$user,
-            'form' => $form->createView(),
-            'NewNotification' => $NewNotification,
-            'moneyAccount' => $moneyAccount,
-            'messages' => $messages,
-        ]);
-    }
-
-    #[Route('/conversation/{conversationId}', name: 'conversation_show')]
-    public function showConversation(Request $request, string $conversationId): Response
-    {
-        $user = $this->security->getUser();
-        $NewNotification = $this->notificationRepository->count(['user' => $user, 'isRead' => false]);
-        $conversation = $this->conversationRepository->findOneBy(['id' => $conversationId]);
-        $messages = $this->messageRepository->findBy(['conversation' => $conversation]);
 
         return $this->render('message/index.html.twig', [
             'title_page' => 'Vintud - Messagerie',
             'log' => (bool)$user,
            'conversation' => $conversation,
             'NewNotification' => $NewNotification,
+            'moneyAccount' => $moneyAccount,
             'messages' => $messages,
+            'form_message' => $form
 
         ]);
     }

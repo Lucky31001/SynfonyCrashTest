@@ -1,0 +1,25 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    {{title_page}}
+{% endblock %}
+
+{% block body %}
+    {% include 'components/navbar/index.html.twig' %}
+    <ul>
+    {% for message in messages %}
+        <li>
+            <strong>{{ message.sender.email}}:</strong> {{ message.content }} ({{ message.createdAt|date('Y-m-d H:i') }})
+        </li>
+    {% endfor %}
+</ul>
+    <div>
+        {{ form_start(form_message) }}
+        <div>
+          {{ form_widget(form_message.content) }}
+        </div>
+        <button type="submit">Envoyer message</button>
+    {{ form_end(form_message) }}
+    </div>
+
+{% endblock %}

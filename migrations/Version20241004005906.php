@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20241003232821 extends AbstractMigration
+final class Version20241004005906 extends AbstractMigration
 {
     public function getDescription(): string
     {
@@ -23,7 +23,9 @@ final class Version20241003232821 extends AbstractMigration
         $this->addSql('CREATE SEQUENCE article_id_seq INCREMENT BY 1 MINVALUE 1 START 1');
         $this->addSql('CREATE SEQUENCE buy_id_seq INCREMENT BY 1 MINVALUE 1 START 1');
         $this->addSql('CREATE SEQUENCE category_id_seq INCREMENT BY 1 MINVALUE 1 START 1');
+        $this->addSql('CREATE SEQUENCE conversation_id_seq INCREMENT BY 1 MINVALUE 1 START 1');
         $this->addSql('CREATE SEQUENCE favorite_id_seq INCREMENT BY 1 MINVALUE 1 START 1');
+        $this->addSql('CREATE SEQUENCE message_id_seq INCREMENT BY 1 MINVALUE 1 START 1');
         $this->addSql('CREATE SEQUENCE money_id_seq INCREMENT BY 1 MINVALUE 1 START 1');
         $this->addSql('CREATE SEQUENCE notification_id_seq INCREMENT BY 1 MINVALUE 1 START 1');
         $this->addSql('CREATE SEQUENCE on_sale_id_seq INCREMENT BY 1 MINVALUE 1 START 1');
@@ -35,9 +37,16 @@ final class Version20241003232821 extends AbstractMigration
         $this->addSql('CREATE INDEX IDX_CF838277A76ED395 ON buy (user_id)');
         $this->addSql('CREATE UNIQUE INDEX UNIQ_CF8382777294869C ON buy (article_id)');
         $this->addSql('CREATE TABLE category (id INT NOT NULL, name VARCHAR(255) NOT NULL, PRIMARY KEY(id))');
+        $this->addSql('CREATE TABLE conversation (id INT NOT NULL, user_one_id INT NOT NULL, user_two_id INT NOT NULL, PRIMARY KEY(id))');
+        $this->addSql('CREATE INDEX IDX_8A8E26E99EC8D52E ON conversation (user_one_id)');
+        $this->addSql('CREATE INDEX IDX_8A8E26E9F59432E1 ON conversation (user_two_id)');
         $this->addSql('CREATE TABLE favorite (id INT NOT NULL, user_id_id INT NOT NULL, article_id_id INT NOT NULL, PRIMARY KEY(id))');
         $this->addSql('CREATE INDEX IDX_68C58ED99D86650F ON favorite (user_id_id)');
         $this->addSql('CREATE INDEX IDX_68C58ED98F3EC46 ON favorite (article_id_id)');
+        $this->addSql('CREATE TABLE message (id INT NOT NULL, sender_id INT NOT NULL, receiver_id INT NOT NULL, conversation_id INT NOT NULL, content TEXT NOT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, PRIMARY KEY(id))');
+        $this->addSql('CREATE INDEX IDX_B6BD307FF624B39D ON message (sender_id)');
+        $this->addSql('CREATE INDEX IDX_B6BD307FCD53EDB6 ON message (receiver_id)');
+        $this->addSql('CREATE INDEX IDX_B6BD307F9AC0396 ON message (conversation_id)');
         $this->addSql('CREATE TABLE money (id INT NOT NULL, user_id INT NOT NULL, account DOUBLE PRECISION NOT NULL, PRIMARY KEY(id))');
         $this->addSql('CREATE UNIQUE INDEX UNIQ_B7DF13E4A76ED395 ON money (user_id)');
         $this->addSql('CREATE TABLE notification (id INT NOT NULL, user_id INT NOT NULL, message VARCHAR(255) NOT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, is_read BOOLEAN NOT NULL, PRIMARY KEY(id))');
@@ -70,8 +79,13 @@ final class Version20241003232821 extends AbstractMigration
         $this->addSql('ALTER TABLE article ADD CONSTRAINT FK_23A0E6612469DE2 FOREIGN KEY (category_id) REFERENCES category (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
         $this->addSql('ALTER TABLE buy ADD CONSTRAINT FK_CF838277A76ED395 FOREIGN KEY (user_id) REFERENCES "user" (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
         $this->addSql('ALTER TABLE buy ADD CONSTRAINT FK_CF8382777294869C FOREIGN KEY (article_id) REFERENCES article (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
+        $this->addSql('ALTER TABLE conversation ADD CONSTRAINT FK_8A8E26E99EC8D52E FOREIGN KEY (user_one_id) REFERENCES "user" (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
+        $this->addSql('ALTER TABLE conversation ADD CONSTRAINT FK_8A8E26E9F59432E1 FOREIGN KEY (user_two_id) REFERENCES "user" (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
         $this->addSql('ALTER TABLE favorite ADD CONSTRAINT FK_68C58ED99D86650F FOREIGN KEY (user_id_id) REFERENCES "user" (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
         $this->addSql('ALTER TABLE favorite ADD CONSTRAINT FK_68C58ED98F3EC46 FOREIGN KEY (article_id_id) REFERENCES article (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
+        $this->addSql('ALTER TABLE message ADD CONSTRAINT FK_B6BD307FF624B39D FOREIGN KEY (sender_id) REFERENCES "user" (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
+        $this->addSql('ALTER TABLE message ADD CONSTRAINT FK_B6BD307FCD53EDB6 FOREIGN KEY (receiver_id) REFERENCES "user" (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
+        $this->addSql('ALTER TABLE message ADD CONSTRAINT FK_B6BD307F9AC0396 FOREIGN KEY (conversation_id) REFERENCES conversation (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
         $this->addSql('ALTER TABLE money ADD CONSTRAINT FK_B7DF13E4A76ED395 FOREIGN KEY (user_id) REFERENCES "user" (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
         $this->addSql('ALTER TABLE notification ADD CONSTRAINT FK_BF5476CAA76ED395 FOREIGN KEY (user_id) REFERENCES "user" (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
         $this->addSql('ALTER TABLE on_sale ADD CONSTRAINT FK_AC20CA5B7294869C FOREIGN KEY (article_id) REFERENCES article (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
@@ -88,7 +102,9 @@ final class Version20241003232821 extends AbstractMigration
         $this->addSql('DROP SEQUENCE article_id_seq CASCADE');
         $this->addSql('DROP SEQUENCE buy_id_seq CASCADE');
         $this->addSql('DROP SEQUENCE category_id_seq CASCADE');
+        $this->addSql('DROP SEQUENCE conversation_id_seq CASCADE');
         $this->addSql('DROP SEQUENCE favorite_id_seq CASCADE');
+        $this->addSql('DROP SEQUENCE message_id_seq CASCADE');
         $this->addSql('DROP SEQUENCE money_id_seq CASCADE');
         $this->addSql('DROP SEQUENCE notification_id_seq CASCADE');
         $this->addSql('DROP SEQUENCE on_sale_id_seq CASCADE');
@@ -97,8 +113,13 @@ final class Version20241003232821 extends AbstractMigration
         $this->addSql('ALTER TABLE article DROP CONSTRAINT FK_23A0E6612469DE2');
         $this->addSql('ALTER TABLE buy DROP CONSTRAINT FK_CF838277A76ED395');
         $this->addSql('ALTER TABLE buy DROP CONSTRAINT FK_CF8382777294869C');
+        $this->addSql('ALTER TABLE conversation DROP CONSTRAINT FK_8A8E26E99EC8D52E');
+        $this->addSql('ALTER TABLE conversation DROP CONSTRAINT FK_8A8E26E9F59432E1');
         $this->addSql('ALTER TABLE favorite DROP CONSTRAINT FK_68C58ED99D86650F');
         $this->addSql('ALTER TABLE favorite DROP CONSTRAINT FK_68C58ED98F3EC46');
+        $this->addSql('ALTER TABLE message DROP CONSTRAINT FK_B6BD307FF624B39D');
+        $this->addSql('ALTER TABLE message DROP CONSTRAINT FK_B6BD307FCD53EDB6');
+        $this->addSql('ALTER TABLE message DROP CONSTRAINT FK_B6BD307F9AC0396');
         $this->addSql('ALTER TABLE money DROP CONSTRAINT FK_B7DF13E4A76ED395');
         $this->addSql('ALTER TABLE notification DROP CONSTRAINT FK_BF5476CAA76ED395');
         $this->addSql('ALTER TABLE on_sale DROP CONSTRAINT FK_AC20CA5B7294869C');
@@ -109,7 +130,9 @@ final class Version20241003232821 extends AbstractMigration
         $this->addSql('DROP TABLE article');
         $this->addSql('DROP TABLE buy');
         $this->addSql('DROP TABLE category');
+        $this->addSql('DROP TABLE conversation');
         $this->addSql('DROP TABLE favorite');
+        $this->addSql('DROP TABLE message');
         $this->addSql('DROP TABLE money');
         $this->addSql('DROP TABLE notification');
         $this->addSql('DROP TABLE on_sale');

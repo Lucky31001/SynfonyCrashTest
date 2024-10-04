@@ -35,7 +35,7 @@ class NotificationController extends AbstractController
         return $this->render('notification/index.html.twig', [
             'title_page' => 'Vintud - Notification',
             'notifications' => $notifications,
-            'NewNotification' =>$NewNotification,
+            'NewNotification' => $NewNotification,
             'log' => (bool)$user,
             'moneyAccount' => $moneyAccount,
         ]);

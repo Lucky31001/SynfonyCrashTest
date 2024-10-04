@@ -3,16 +3,22 @@
 namespace App\Controller;
 
 use App\Entity\Buy;
+use App\Entity\Message;
 use App\Entity\Notification;
+use App\Form\MessageType;
 use App\Repository\BuyRepository;
 use App\Entity\Sell;
+use App\Entity\User;
+use App\Repository\ConversationRepository;
 use App\Repository\NotificationRepository;
 use App\Repository\SellRepository;
 use App\Repository\UserRepository;
 use App\Repository\ArticleRepository;
 use App\Repository\OnSaleRepository;
+use App\Service\MessageService;
 use Mpdf\Mpdf;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\SecurityBundle\Security;
@@ -28,12 +34,15 @@ class BuyController extends AbstractController
         private OnSaleRepository $onSaleRepository,
         private Security $security,
         private MoneyRepository $moneyRepository,
-        private NotificationRepository $notificationRepository
+        private NotificationRepository $notificationRepository,
+        private UserRepository $userRepository,
+        private ConversationRepository $conversationRepository,
+        private MessageService $MessageService
     ) {
     }
 
     #[Route('{id}/article/buy/new', name: 'buy_article')]
-    public function buy(int $id): Response
+    public function buy(int $id, Request $request): Response
     {
         $user = $this->security->getUser();
         $article = $this->articleRepository->find($id);
@@ -97,12 +106,29 @@ class BuyController extends AbstractController
                     }
                 }
             }
+
+            //Ajout du formulaire pour empêcher un potentiel bug
+            $sender = $this->userRepository->find($user);
+            $receiver = $this->userRepository->find($this->onSaleRepository->find($this->articleRepository->findOneById($id)));
+            $conversation = $this->conversationRepository->findOneByUsers($sender, $receiver);
+            $messages = new Message();
+            $form = $this->createForm(MessageType::class, $messages);
+            $form->handleRequest($request);
+            if ($form->isSubmitted() && $form->isValid()) {
+                $content = $form->get('content')->getData();
+                $form = $this->MessageService->sendMessage($sender, $receiver, $conversation, $messages, $content);
+                return $this->redirectToRoute('conversation_show', ['conversationId' => $conversation->getId()]);
+            }
+        } else {
+            return $this->redirectToRoute('app_login');
         }
 
         return $this->render('article/show.html.twig', [
             'controller_name' => 'ItemController',
             'article' => $article,
             'message' => $message,
+            'new_conv' => $form,
+
         ]);
     }
 

@@ -17,6 +17,7 @@ use App\Repository\MoneyRepository;
 use App\Repository\NotificationRepository;
 use App\Repository\OnSaleRepository;
 use App\Repository\UserRepository;
+use App\Service\MessageService;
 use Doctrine\ORM\EntityManagerInterface;
 use phpDocumentor\Reflection\PseudoTypes\True_;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -27,6 +28,8 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class ArticleController extends AbstractController
 {
+
+
     public function __construct(
         private CategoryRepository $categoryRepository,
         private ArticleRepository $articleRepository,
@@ -37,7 +40,8 @@ class ArticleController extends AbstractController
         private MoneyRepository $moneyRepository,
         private EntityManagerInterface $entityManager,
         private NotificationRepository $notificationRepository,
-        private MessageRepository $messageRepository
+        private MessageRepository $messageRepository,
+        private MessageService $MessageService
     ) {
     }
     #[Route('/create/article/', name: 'create_article')]
@@ -120,10 +124,8 @@ class ArticleController extends AbstractController
 
         $user = $this->security->getUser();
         $sender = $this->userRepository->find($user);
-        $receiver = $this->userRepository->find($this->onSaleRepository->find($this->articleRepository->findOneById($id)));
-        $conversation = $this->conversationRepository->findOneByUsers($sender, $receiver);
+        $receiver = $this->userRepository->find($this->onSaleRepository->findOneBy(['article' => $this->articleRepository->find($id)])->getUser());
         $NewNotification = $this->notificationRepository->count(['user' => $user, 'isRead' => false]);
-        $messages = $this->messageRepository->findBy(['conversation' => $conversation]);
 
         if (!$user) {
             return $this->redirectToRoute('app_login');
@@ -132,24 +134,17 @@ class ArticleController extends AbstractController
             $moneyAccount = $money->getAccount();
         }
 
-        if (!$conversation) {
-            $conversation = new Conversation();
-            $conversation->setUserOne($sender);
-            $conversation->setUserTwo($receiver);
-            $this->entityManager->persist($conversation);
-        }
-
         $message = new Message();
         $form = $this->createForm(MessageType::class, $message);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $message->setContent($form->get('content')->getData());
-            $message->setConversation($conversation);
-            $message->setSender($sender);
-            $message->setReceiver($receiver);
-            $message->setCreatedAt(new \DateTime());
-            $this->entityManager->persist($message);
-            $this->entityManager->flush();
+            $conversation = $this->conversationRepository->findOneByUsers($sender, $receiver);
+            if ($sender === $receiver){
+                return $this->redirectToRoute('app_login');
+            }
+            $content = $form->get('content')->getData();
+            $form = $this->MessageService->sendMessage($sender, $receiver, $conversation, $message, $content);
+            $messages = $this->messageRepository->findBy(['conversation' => $conversation]);
             return $this->redirectToRoute('conversation_show', ['conversationId' => $conversation->getId()]);
         }
 

@@ -193,12 +193,12 @@ class BuyController extends AbstractController
         $money = $this->moneyRepository->findOneBy(['user' => $user]);
         $moneyAccount = $money->getAccount();
 
-        $buys = $this->sellRepository->findBy(['owner' => $user]);
+        $sells = $this->sellRepository->findBy(['owner' => $user]);
 
         $articles = [];
-        if ($buys) {
-            foreach ($buys as $buy) {
-                $article = $buy->getArticle();
+        if ($sells) {
+            foreach ($sells as $sell) {
+                $article = $sell->getArticle();
                 if ($article) {
                     $prix = $article->getPrice();
                     $tva = $article->getTva();

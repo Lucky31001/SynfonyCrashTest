@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Buy;
+use App\Entity\Notification;
 use App\Repository\BuyRepository;
 use App\Entity\Sell;
 use App\Repository\NotificationRepository;
@@ -10,6 +11,7 @@ use App\Repository\SellRepository;
 use App\Repository\UserRepository;
 use App\Repository\ArticleRepository;
 use App\Repository\OnSaleRepository;
+use Mpdf\Mpdf;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -87,6 +89,11 @@ class BuyController extends AbstractController
                         $this->articleRepository->save($article);
 
                         $message = 'produit acheté avec succès';
+
+                        $notification = new Notification();
+                        $notification->setUser($owner);
+                        $notification->setMessage('Votre article ' . $article->getTitle() . ' a été acheté');
+                        $this->notificationRepository->save($notification);
                     }
                 }
             }
@@ -194,5 +201,63 @@ class BuyController extends AbstractController
             'canDelete' => $canDelete,
             'NewNotification' => $NewNotification
         ]);
+    }
+
+    #[Route('/my-sell/pdf', name: 'sell_article_pdf')]
+    public function sellPagePdf(): Response
+    {
+        $user = $this->getUser();
+        if (!$user) {
+            return $this->redirectToRoute('app_login');
+        }
+
+        $money = $this->moneyRepository->findOneBy(['user' => $user]);
+        $moneyAccount = $money->getAccount();
+
+        $buys = $this->sellRepository->findBy(['owner' => $user]);
+
+        $articles = [];
+        if ($buys) {
+            foreach ($buys as $buy) {
+                $article = $buy->getArticle();
+                if ($article) {
+                    $prix = $article->getPrice();
+                    $tva = $article->getTva();
+
+                    $ttc = $prix + ($prix * ($tva / 100));
+
+                    $article->ttc = $ttc;
+                    $articles[] = $article;
+                }
+            }
+        }
+
+        $canDelete = [];
+        foreach ($articles as $article) {
+            $onsale = $this->onSaleRepository->findOneBy(['article' => $article, 'user' => $user]);
+            $canDelete[] = (bool)$onsale;
+        }
+
+        $NewNotification = $this->notificationRepository->count(['user' => $user, 'isRead' => false]);
+
+        // Render the HTML content
+        $html = $this->renderView('my-sell/show.html.twig', [
+            'log' => (bool)$user,
+            'moneyAccount' => $moneyAccount,
+            'articles' => $articles,
+            'canDelete' => $canDelete,
+            'NewNotification' => $NewNotification
+        ]);
+
+        // Instantiate mPDF
+        $mpdf = new Mpdf();
+
+        // Load HTML to mPDF
+        $mpdf->WriteHTML($html);
+
+        // Output the generated PDF to Browser (force download)
+        $mpdf->Output("my-sales.pdf", "D");
+
+        return new Response();
     }
 }

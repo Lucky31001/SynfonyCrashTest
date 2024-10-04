@@ -56,7 +56,7 @@ class MessageController extends AbstractController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $content = $form->get('content')->getData();
-            $form = $this->MessageService->sendMessage($sender, $receiver, $conversation, $message, $content);
+            $form = $this->MessageService->sendMessage($sender, $receiver, $message, $content);
             return $this->redirectToRoute('conversation_show', ['conversationId' => $conversation->getId()]);
         }
         $NewNotification = $this->notificationRepository->count(['user' => $user, 'isRead' => false]);

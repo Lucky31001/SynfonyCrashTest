@@ -6,7 +6,7 @@
 
 {% block body %}
     {% include 'components/navbar/index.html.twig' %}
-    <ul>
+    <ul style="padding-top: 100px">
     {% for message in messages %}
         <li>
             <strong>{{ message.sender.email}}:</strong> {{ message.content }} ({{ message.createdAt|date('Y-m-d H:i') }})

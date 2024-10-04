@@ -121,7 +121,6 @@
                 <a href="{{ path('buy_article', {'id': article.id}) }}" class="button">Acheter l'article</a>
                 <a href="{{ path('catalog') }}" class="button button--secondary">Retour au catalogue</a>
             </div>
-            {{message}}
             {{ form_start(new_conv) }}
             <div>
                 {{ form_widget(new_conv.content) }}
@@ -129,6 +128,5 @@
             <button type="submit">Create</button>
             {{ form_end(new_conv) }}
         </article>
-        <a href="{{ path('catalog') }}" class="back">Retour au catalogue</a>
     </main>
 {% endblock %}

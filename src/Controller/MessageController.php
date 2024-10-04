@@ -70,7 +70,7 @@ class MessageController extends AbstractController
             'moneyAccount' => $moneyAccount,
             'messages' => $messages,
             'form_message' => $form,
-            'email' => $user->getEmail(),
+            'email' => (bool)$user ? $user->getEmail() : '',
 
         ]);
     }
@@ -92,7 +92,7 @@ class MessageController extends AbstractController
             'conversations' => $conversations,
             'NewNotification' => $NewNotification,
             'moneyAccount' => $moneyAccount,
-            'email' => $user->getEmail(),
+            'email' => (bool)$user ? $user->getEmail() : '',
         ]);
     }
 }

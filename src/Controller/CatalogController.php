@@ -63,7 +63,7 @@ class CatalogController extends AbstractController
             'canDelete' => $canDelete,
             'moneyAccount' => $moneyAccount,
             'NewNotification' => $NewNotification,
-            'email' => $user->getEmail(),
+            'email' => (bool)$user ? $user->getEmail() : '',
         ]);
     }
     #[Route('filter/{id}', name: 'filtered_catalog')]
@@ -102,7 +102,7 @@ class CatalogController extends AbstractController
             'canDelete' => $canDelete,
             'moneyAccount' => $moneyAccount,
             'NewNotification' => $NewNotification,
-            'email' => $user->getEmail(),
+            'email' => (bool)$user ? $user->getEmail() : '',
         ]);
     }
 }

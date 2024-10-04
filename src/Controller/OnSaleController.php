@@ -54,7 +54,7 @@ class OnSaleController extends AbstractController
             'moneyAccount' => $moneyAccount,
             'canDelete' => $canDelete,
             'NewNotification' => $NewNotification,
-            'email' => $user->getEmail(),
+            'email' => (bool)$user ? $user->getEmail() : '',
         ]);
     }
 }

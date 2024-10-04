@@ -61,7 +61,7 @@ class MoneyController extends AbstractController
             'moneyAccount' => $moneyAccount,
             'NewNotification' => $NewNotification,
             'canDelete' => $canDelete,
-            'email' => $user->getEmail(),
+            'email' => (bool)$user ? $user->getEmail() : '',
         ]);
     }
 }

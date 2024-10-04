@@ -6,6 +6,7 @@ use App\Entity\Article;
 use App\Entity\Category;
 use App\Entity\Conversation;
 use App\Entity\Message;
+use App\Entity\Notification;
 use App\Entity\OnSale;
 use App\Form\ArticleForm;
 use App\Form\MessageType;
@@ -136,13 +137,20 @@ class ArticleController extends AbstractController
         $form = $this->createForm(MessageType::class, $message);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $conversation = $this->conversationRepository->findOneByUsers($sender, $receiver);
             if ($sender === $receiver) {
                 return $this->redirectToRoute('app_login');
             }
             $content = $form->get('content')->getData();
-            $form = $this->MessageService->sendMessage($sender, $receiver, $conversation, $message, $content);
+            $conversation = $this->MessageService->sendMessage($sender, $receiver, $message, $content);
             $messages = $this->messageRepository->findBy(['conversation' => $conversation]);
+
+            $notification = new Notification();
+            $article = $this->articleRepository->find($id);
+            $onsale = $this->onSaleRepository->findOneBy(['article' => $article]);
+            $notification->setUser($onsale->getUser());
+            $notification->setMessage($sender->getEmail() . ' a commencé une conversation avec vous');
+            $this->notificationRepository->save($notification);
+
             return $this->redirectToRoute('conversation_show', ['conversationId' => $conversation->getId()]);
         }
 
@@ -153,7 +161,7 @@ class ArticleController extends AbstractController
             'new_conv' => $form,
             'NewNotification' => $NewNotification,
             'moneyAccount' => $moneyAccount,
-            'email' => $user->getEmail(),
+            'email' => (bool)$user ? $user->getEmail() : '',
         ]);
     }
 }

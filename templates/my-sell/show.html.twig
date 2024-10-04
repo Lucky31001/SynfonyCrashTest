@@ -5,11 +5,7 @@
 {% block body %}
 {#    {% include 'components/navbar/index.html.twig' %}#}
     <style>
-        body {
-            font-family: Arial, sans-serif;
-        }
-
-        .container {
+        .container-articles {
             padding: 150px 0 0 0;
             display: flex;
             justify-content: center;
@@ -39,7 +35,7 @@
             color: #333;
         }
     </style>
-    <div class="container">
+    <div class="container-articles">
         {% if articles is not empty %}
             <ul class="article-list">
                 {% for article in articles %}

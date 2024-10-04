@@ -4,38 +4,34 @@
 
 {% block body %}
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-            background-color: #f4f4f9;
-        }
-
         .category-wrapper {
             margin: 1em auto;
             max-width: 800px;
             width: 95%;
-            font: 18px/1.5 sans-serif;
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
         }
 
         .category {
-            background-color: #ffffff;
+            background-color: #fff;
             padding: 20px;
             border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             margin-bottom: 20px;
             transition: transform 0.3s ease, box-shadow 0.3s ease;
             text-decoration: none;
-            color: inherit;
-            display: block;
+            gap: 10px;
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
         }
 
         .category:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
         }
 
         .category h2 {
@@ -48,7 +44,7 @@
             display: inline-block;
             margin-top: 10px;
             padding: 10px 15px;
-            background-color: #007bff;
+            background-color: #333;
             color: white;
             text-decoration: none;
             border-radius: 5px;
@@ -60,18 +56,24 @@
         }
     </style>
 
-    <div class="category-wrapper">
-        <h1>Liste des catégories</h1>
+    <div class="container">
+        <div class="category-wrapper">
+            <h1>Liste des catégories</h1>
 
-        {% for category in categories %}
-            <div class="category">
-                <h2>{{ category.name }}</h2>
-                <a href="{{ path('delete_category', {'id': category.id}) }}">Supprimer</a>
-                <a href="{{ path('modif_category', {'id': category.id}) }}">Modifier</a>
+            <div>
+                <a href="{{ path('catalog') }}">Home</a>
+                <a href="{{ path('create_category') }}">Créer une catégorie</a>
             </div>
-        {% endfor %}
 
-        <a href="{{ path('catalog') }}">Catalogue</a>
-        <a href="{{ path('create_category') }}">Créer une catégorie</a>
+            {% for category in categories %}
+                <div class="category">
+                    <h2>{{ category.name }}</h2>
+                    <div>
+                        <a href="{{ path('delete_category', {'id': category.id}) }}">Supprimer</a>
+                        <a href="{{ path('modif_category', {'id': category.id}) }}">Modifier</a>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
     </div>
 {% endblock %}

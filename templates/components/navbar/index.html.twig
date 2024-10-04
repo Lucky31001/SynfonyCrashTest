@@ -17,18 +17,14 @@
         <i data-lucide="plus-"></i>
         Ajouter money
       </a>
-      {% if NewNotification %}
-            <span class="notification-count">{{NewNotification}}</span>
-        <a href="{{ path('notification') }}">
-            <i data-lucide="bell"></i>
-      {% else %}
-        <a href="{{ path('notification') }}">
-          <i data-lucide="bell"></i>
-      </a>
-      {% endif %}
-
       {{moneyAccount}} €
       {% include 'components/avatar/index.html.twig' %}
+       <a href="{{ path('notification') }}" class="notification-icon">
+          <i data-lucide="bell"></i>
+          {% if NewNotification %}
+              <span class="notification-count">{{ NewNotification }}</span>
+          {% endif %}
+      </a>
     {% else %}
       <div class="auths-links">
         <li>
@@ -42,3 +38,7 @@
     </ul>
   </div>
 </nav>
+
+<script>
+  lucide.createIcons();
+</script>

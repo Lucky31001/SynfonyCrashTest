@@ -24,7 +24,7 @@ class NotificationController extends AbstractController
         if (!$user) {
             return $this->redirectToRoute('app_login');
         }
-
+        $NewNotification = $this->notificationRepository->count(['user' => $user, 'isRead' => false]);
         $moneyAccount = 0;
         if ($user) {
             $money = $this->moneyRepository->findOneBy(['user' => $user]);
@@ -35,6 +35,7 @@ class NotificationController extends AbstractController
         return $this->render('notification/index.html.twig', [
             'title_page' => 'Vintud - Notification',
             'notifications' => $notifications,
+            'NewNotification' => $NewNotification,
             'log' => (bool)$user,
             'moneyAccount' => $moneyAccount,
         ]);

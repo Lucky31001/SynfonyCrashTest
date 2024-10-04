@@ -1,5 +1,4 @@
 <style>
-  /* Navigation */
   .container {
     width: 90%;
     max-width: 1200px;
@@ -84,17 +83,16 @@
     text-decoration: none;
   }
 
-  /* Basic styling for the button */
   .add-article-button {
-    color: white; /* Text color */
-    padding: 10px 20px; /* Padding */
-    border: none; /* No border */
-    border-radius: 5px; /* Rounded corners */
-    font-size: 16px; /* Font size */
-    display: flex; /* Flexbox for icon and text */
-    align-items: center; /* Center items vertically */
-    cursor: pointer; /* Pointer cursor on hover */
-    transition: background-color 0.3s ease; /* Smooth transition */
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
     gap: 10px;
     text-decoration: none;
     border: solid 1px #333;
@@ -107,13 +105,31 @@
     border: none;
   }
 
+  /* General styles for the notification icon */
+  .notification-icon {
+    position: relative; /* Positioning context for the notification count */
+    display: inline-block; /* Aligns the icon correctly */
+    font-size: 24px; /* Adjust the size of the icon */
+    color: #333; /* Default color for the icon */
+    transition: color 0.3s; /* Smooth transition for hover effect */
+  }
+
+  .notification-icon:hover {
+    color: #007bff; /* Change color on hover */
+  }
+
+  /* Styles for the notification count */
   .notification-count {
-    top: 0;
-    right: 0;
-    background-color: #ff0000;
-    color: #fff;
-    border-radius: 50%;
-    padding: 0.5rem;
-    font-size: 0.8rem;
+    position: absolute; /* Position the count relative to the icon */
+    top: -8px; /* Adjust vertical position */
+    right: -8px; /* Adjust horizontal position */
+    background-color: #ff3d00; /* Background color for the count */
+    color: white; /* Text color for the count */
+    border-radius: 50%; /* Make it circular */
+    padding: 2px 6px; /* Add some padding */
+    font-size: 12px; /* Adjust font size */
+    font-weight: bold; /* Make the text bold */
+    min-width: 20px; /* Minimum width for consistent sizing */
+    text-align: center; /* Center the text */
   }
 </style>

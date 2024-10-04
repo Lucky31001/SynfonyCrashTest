@@ -4,18 +4,18 @@
     <img
       src="{{ article.image }}"
       class="catalog-item-image"
-     alt="image non chargee"/>
+      alt="image non chargee"/>
     <div class="catalog-item-content">
       <h2 class="catalog-item-title">
         {{ article.title }}
       </h2>
       <p class="catalog-item-description">{{ article.content }}</p>
       <div class="catalog-item-details">
-        <span class="catalog-item-price">{{ article.price + (article.tva * article.price)/100 }} €</span>
+        <span class="catalog-item-price">{{ article.price + (article.tva * article.price)/100 }} € TTC</span>
         <div class="catalog-item-fav-content">
             <a href="{{ path('app_favorite_add', {'article_id': article.id}) }}">
-              <span class="catalog-item-fav">
-                 <i data-lucide="star"></i>
+              <span>
+                 <i data-lucide="heart" class="fav-icon"></i>
               </span>
             </a>
         </div>

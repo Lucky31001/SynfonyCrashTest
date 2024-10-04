@@ -1,24 +1,31 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Créé une nouvelle catégorie{% endblock %}
-
+{% block title %}Créer une nouvelle catégorie{% endblock %}
 
 {% block body %}
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-            background-color: #f4f4f9;
-        }
-
-        form {
+        .container {
             max-width: 600px;
             margin: 0 auto;
             padding: 20px;
-            border: 1px solid #ccc;
             border-radius: 10px;
-            background-color: #fff;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
         }
 
         form div {
@@ -38,45 +45,66 @@
             width: 100%;
             padding: 10px;
             box-sizing: border-box;
-            border: 1px solid #ccc;
             border-radius: 5px;
             background-color: #f9f9f9;
+            font-size: 16px;
+            outline: none;
+            border: none;
+            border: 1px solid #ccc;
         }
 
+        Form input[type="text"]:focus,
+        form input[type="number"]:focus,
+        form select:focus {
+            border: none;
+            box-shadow: 0 0 0 0.2rem #ccc;
+        }
+        .btn-container {
+            display: flex;
+            justify-content: end;
+        }
         form button {
             padding: 10px 15px;
-            background-color: #007bff;
+            background-color: #333;
             color: white;
             border: none;
             border-radius: 5px;
             cursor: pointer;
             transition: background-color 0.3s ease;
+            font-size: 16px;
+            align-self: flex-start;
         }
 
         form button:hover {
-            background-color: #0056b3;
+            background-color: #444;
         }
 
-        a {
+        .back-link {
             display: inline-block;
             margin-top: 20px;
-            color: #007bff;
+            color: #333;
             text-decoration: none;
         }
 
-        a:hover {
+        .back-link:hover {
             text-decoration: underline;
         }
     </style>
 
-    <h1>Créé une nouvelle catégorie</h1>
+    <div class="container">
+        <h1>Créer une nouvelle catégorie</h1>
 
-    {{ form_start(form) }}
-    <div>
-        {{ form_label(form.name) }}
-        {{ form_widget(form.name) }}
+        {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+            <div>
+                {{ form_label(form.name, 'Nom de la catégorie', {'label_attr': {'for': 'category_name'}}) }}
+                {{ form_widget(form.name, {'attr': {'id': 'category_name', 'required': 'required', 'aria-required': 'true'}}) }}
+                {{ form_errors(form.name) }}
+            </div>
+            <div class="btn-container">
+                <button type="submit">Créer</button>
+            </div>
+        {{ form_end(form) }}
+
+        <a href="{{ path('catalog') }}" class="back-link">Home</a>
     </div>
-    <button type="submit">Créé</button>
-    {{ form_end(form) }}
-    <a href="{{ path('catalog') }}">Catalogue</a>
-{% endblock %}
+{% endblock %}  

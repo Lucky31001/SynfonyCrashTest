@@ -3,52 +3,55 @@
 {% block title %}Article créé{% endblock %}
 
 {% block body %}
-<style>
-    /* public/css/styles.css */
-    body {
-        font-family: 'Helvetica Neue', sans-serif;
-        background-color: #e0f7fa;
-        margin: 0;
-        padding: 0;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100vh;
-    }
+    <style>
+        .container {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
 
-    .container {
-        background-color: #ffffff;
-        padding: 30px;
-        border-radius: 10px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        text-align: center;
-    }
+        h1 {
+            color: #2c3e50;
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+            font-weight: 500;
+        }
 
-    h1 {
-        color: #00796b;
-        font-size: 24px;
-        margin-bottom: 20px;
-    }
+        .success-icon {
+            color: #27ae60;
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
 
-    a {
-        display: inline-block;
-        margin: 10px 0;
-        padding: 12px 25px;
-        color: #ffffff;
-        background-color: #00796b;
-        text-decoration: none;
-        border-radius: 5px;
-        transition: background-color 0.3s ease;
-    }
+        .button-group {
+            display: flex;
+            gap: 1rem;
+        }
 
-    a:hover {
-        background-color: #004d40;
-    }
-</style>
+        .btn {
+            display: inline-block;
+            padding: 0.75rem 1.5rem;
+            text-decoration: none;
+            border-radius: 4px;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            font-weight: 500;
+            color: #2c3e50;
+            border: solid 1px #2c3e50;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+    </style>
     <div class="container">
-        <h1>Article créé</h1>
-        <a href="{{ path('create_article') }}">Créé un nouveau article</a>
-        <a href="{{ path('catalog') }}">Catalogue</a>
-        <a href="{{ path('catalog') }}">Home</a>
+        <div>
+            <h1>Article créée avec succès ! ✅</h1>
+            <div class="button-group">
+                <a href="{{ path('create_article') }}" class="btn">Créé un nouveau article</a>
+                <a href="{{ path('catalog') }}" class="btn">Home</a>
+            </div>
+        </div>
     </div>
 {% endblock %}

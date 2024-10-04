@@ -141,7 +141,7 @@ class ArticleController extends AbstractController
                 return $this->redirectToRoute('app_login');
             }
             $content = $form->get('content')->getData();
-            $conversation= $this->MessageService->sendMessage($sender, $receiver, $message, $content);
+            $conversation = $this->MessageService->sendMessage($sender, $receiver, $message, $content);
             $messages = $this->messageRepository->findBy(['conversation' => $conversation]);
 
             $notification = new Notification();

@@ -10,6 +10,7 @@ use App\Repository\NotificationRepository;
 use App\Repository\UserRepository;
 use App\Repository\ConversationRepository;
 use App\Repository\MessageRepository;
+use App\Service\MessageService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
@@ -26,7 +27,8 @@ class MessageController extends AbstractController
         private readonly Security $security,
         private readonly MoneyRepository $moneyRepository,
         private readonly EntityManagerInterface $entityManager,
-        private readonly NotificationRepository $notificationRepository
+        private readonly NotificationRepository $notificationRepository,
+        private readonly MessageService $MessageService
     ) {
     }
 
@@ -40,10 +42,8 @@ class MessageController extends AbstractController
 
         $sender = $this->userRepository->find($user);
         $receiver = $this->conversationRepository->findOneById($conversationId)->getUserTwo();
-        if ($sender === $receiver) {
-            $receiver = $this->conversationRepository->findOneById($conversationId)->getUserOne();
-        }
-        $conversation = $this->conversationRepository->findOneByUsers($sender, $receiver);
+        $receiver = $this->MessageService->checkReceiver($receiver, $sender, $conversationId);
+        $conversation = $this->conversationRepository->findOneByUsers($sender, $receiver, $conversationId);
 
         if (!$user) {
             return $this->redirectToRoute('app_login');
@@ -51,26 +51,12 @@ class MessageController extends AbstractController
             $money = $this->moneyRepository->findOneBy(['user' => $user]);
             $moneyAccount = $money->getAccount();
         }
-
-        if (!$conversation) {
-            $conversation = new Conversation();
-            $conversation->setUserOne($sender);
-            $conversation->setUserTwo($receiver);
-            $this->entityManager->persist($conversation);
-        }
-
         $message = new Message();
         $form = $this->createForm(MessageType::class, $message);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $content = $form->get('content')->getData();
-            $message->setConversation($conversation);
-            $message->setSender($sender);
-            $message->setReceiver($receiver);
-            $message->setContent($content);
-            $message->setCreatedAt(new \DateTime());
-            $this->entityManager->persist($message);
-            $this->entityManager->flush();
+            $form = $this->MessageService->sendMessage($sender, $receiver, $conversation, $message, $content);
             return $this->redirectToRoute('conversation_show', ['conversationId' => $conversation->getId()]);
         }
         $NewNotification = $this->notificationRepository->count(['user' => $user, 'isRead' => false]);

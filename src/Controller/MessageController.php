@@ -34,6 +34,10 @@ class MessageController extends AbstractController
     public function showConversation(Request $request, int $conversationId): Response
     {
         $user = $this->security->getUser();
+        if (!$user) {
+            return $this->redirectToRoute('app_login');
+        }
+
         $sender = $this->userRepository->find($user);
         $receiver = $this->conversationRepository->findOneById($conversationId)->getUserTwo();
         if ($sender === $receiver) {

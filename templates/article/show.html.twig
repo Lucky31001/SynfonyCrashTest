@@ -122,9 +122,6 @@
                 <a href="{{ path('catalog') }}" class="button button--secondary">Retour au catalogue</a>
             </div>
             {{message}}
-            <a href="{{ path('buy_article', {'id': article.id}) }}" class="back">
-                acheter article
-            </a>
             {{ form_start(new_conv) }}
             <div>
                 {{ form_widget(new_conv.content) }}

@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Buy;
+use App\Entity\Notification;
 use App\Repository\BuyRepository;
 use App\Entity\Sell;
 use App\Repository\NotificationRepository;
@@ -87,6 +88,11 @@ class BuyController extends AbstractController
                         $this->articleRepository->save($article);
 
                         $message = 'produit acheté avec succès';
+
+                        $notification = new Notification();
+                        $notification->setUser($owner);
+                        $notification->setMessage('Votre article ' . $article->getTitle() . ' a été acheté');
+                        $this->notificationRepository->save($notification);
                     }
                 }
             }

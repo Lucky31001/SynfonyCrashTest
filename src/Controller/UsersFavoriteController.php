@@ -36,9 +36,11 @@ class UsersFavoriteController extends AbstractController
             $moneyAccount = $money->getAccount();
         }
         $favorites = $this->favoriteRepository->findBy(['user_id' => $user]);
+        $articles = [];
         foreach ($favorites as $favorite) {
             $articleIds[] = $favorite->getAritcleId();
-        }        $articles = $this->articleRepository->findBy(['id' => $articleIds]);
+            $articles = $this->articleRepository->findBy(['id' => $articleIds]);
+        }
 
         $canDelete = [];
         foreach ($articles as $article) {
@@ -55,7 +57,8 @@ class UsersFavoriteController extends AbstractController
             'canDelete' => $canDelete,
             'log' => (bool)$user,
             'moneyAccount' => $moneyAccount,
-            'NewNotification' => $NewNotification
+            'NewNotification' => $NewNotification,
+            'email' => $user->getEmail(),
         ]);
     }
 }

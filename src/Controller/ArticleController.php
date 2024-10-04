@@ -160,6 +160,7 @@ class ArticleController extends AbstractController
             'new_conv' => $form,
             'NewNotification' => $NewNotification,
             'moneyAccount' => $moneyAccount,
+            'email' => $user->getEmail(),
         ]);
     }
 }

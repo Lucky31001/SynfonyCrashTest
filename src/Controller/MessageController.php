@@ -83,8 +83,30 @@ class MessageController extends AbstractController
             'NewNotification' => $NewNotification,
             'moneyAccount' => $moneyAccount,
             'messages' => $messages,
-            'form_message' => $form
+            'form_message' => $form,
+            'email' => $user->getEmail(),
 
+        ]);
+    }
+
+    #[Route('/show_conversation', name: 'all_conversation')]
+    public function showAllConversation(): Response
+    {
+        $user = $this->security->getUser();
+        if (!$user) {
+            return $this->redirectToRoute('app_login');
+        }
+        $money = $this->moneyRepository->findOneBy(['user' => $user]);
+        $moneyAccount = $money->getAccount();
+        $conversations = $this->conversationRepository->findByUser($user);
+        $NewNotification = $this->notificationRepository->count(['user' => $user, 'isRead' => false]);
+        return $this->render('conversation/index.html.twig', [
+            'title_page' => 'Vintud - Conversations',
+            'log' => (bool)$user,
+            'conversations' => $conversations,
+            'NewNotification' => $NewNotification,
+            'moneyAccount' => $moneyAccount,
+            'email' => $user->getEmail(),
         ]);
     }
 }

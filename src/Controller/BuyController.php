@@ -150,7 +150,8 @@ class BuyController extends AbstractController
             'moneyAccount' => $moneyAccount,
             'articles' => $articles,
             'canDelete' => $canDelete,
-            'NewNotification' => $NewNotification
+            'NewNotification' => $NewNotification,
+            'email' => $user->getEmail(),
         ]);
     }
 

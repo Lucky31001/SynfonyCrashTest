@@ -63,6 +63,7 @@ class CatalogController extends AbstractController
             'canDelete' => $canDelete,
             'moneyAccount' => $moneyAccount,
             'NewNotification' => $NewNotification,
+            'email' => $user->getEmail(),
         ]);
     }
     #[Route('filter/{id}', name: 'filtered_catalog')]
@@ -91,6 +92,8 @@ class CatalogController extends AbstractController
             $moneyAccount = $money->getAccount();
         }
 
+        $NewNotification = $this->notificationRepository->count(['user' => $user, 'isRead' => false]);
+
         return $this->render('catalog/filteredArticle.html.twig', [
             'title_page' => 'Vintud - Catalogue',
             'articles' => $articles,
@@ -98,6 +101,8 @@ class CatalogController extends AbstractController
             'filter_form' => $filterForm->createView(),
             'canDelete' => $canDelete,
             'moneyAccount' => $moneyAccount,
+            'NewNotification' => $NewNotification,
+            'email' => $user->getEmail(),
         ]);
     }
 }

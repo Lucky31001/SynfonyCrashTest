@@ -60,7 +60,8 @@ class MoneyController extends AbstractController
             'filter_form' => $filterForm->createView(),
             'moneyAccount' => $moneyAccount,
             'NewNotification' => $NewNotification,
-            'canDelete' => $canDelete
+            'canDelete' => $canDelete,
+            'email' => $user->getEmail(),
         ]);
     }
 }

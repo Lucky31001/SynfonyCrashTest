@@ -63,6 +63,7 @@ class CatalogController extends AbstractController
             'canDelete' => $canDelete,
             'moneyAccount' => $moneyAccount,
             'NewNotification' => $NewNotification,
+            'email' => $user->getEmail(),
         ]);
     }
     #[Route('filter/{id}', name: 'filtered_catalog')]
@@ -98,6 +99,7 @@ class CatalogController extends AbstractController
             'filter_form' => $filterForm->createView(),
             'canDelete' => $canDelete,
             'moneyAccount' => $moneyAccount,
+            'email' => $user->getEmail(),
         ]);
     }
 }

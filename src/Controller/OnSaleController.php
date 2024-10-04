@@ -53,7 +53,8 @@ class OnSaleController extends AbstractController
             'log' => (bool)$user,
             'moneyAccount' => $moneyAccount,
             'canDelete' => $canDelete,
-            'NewNotification' => $NewNotification
+            'NewNotification' => $NewNotification,
+            'email' => $user->getEmail(),
         ]);
     }
 }

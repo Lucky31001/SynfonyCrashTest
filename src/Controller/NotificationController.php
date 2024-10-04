@@ -38,6 +38,7 @@ class NotificationController extends AbstractController
             'NewNotification' => $NewNotification,
             'log' => (bool)$user,
             'moneyAccount' => $moneyAccount,
+            'email' => $user->getEmail(),
         ]);
     }
 

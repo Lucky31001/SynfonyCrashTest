@@ -5,10 +5,12 @@
     <i data-lucide="user" aria-hidden="true"></i>
   </div>
   <nav class="menu" role="menu">
+    <span class="menu-item" role="menuitem">{{ email }}</span>
     <a href="{{ path('app_users_favorite') }}" class="menu-item" role="menuitem">Mes Favoris</a>
     <a href="{{ path('on_sale') }}" class="menu-item" role="menuitem">Mes articles</a>
     <a href="{{ path('buy_article_show') }}" class="menu-item" role="menuitem">Mes Achats</a>
     <a href="{{ path('sell_article_show') }}" class="menu-item" role="menuitem">Mes Vente</a>
+    <a href="{{ path('all_conversation') }}" class="menu-item" role="menuitem">Mes Conversations</a>
     <a href="{{ path('app_logout') }}" class="menu-item logout" role="menuitem">Déconnexion</a>
   </nav>
 </div>

@@ -32,6 +32,16 @@ class ConversationRepository extends ServiceEntityRepository
         ;
     }
 
+    public function findByUser($user)
+    {
+        return $this->createQueryBuilder('c')
+            ->where('c.userOne = :user')
+            ->orWhere('c.userTwo = :user')
+            ->setParameter('user', $user)
+            ->getQuery()
+            ->getResult();
+    }
+
     public function save(Conversation $conversation): void
     {
         $em = $this->getEntityManager();

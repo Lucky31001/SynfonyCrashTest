@@ -3,7 +3,7 @@
 {% block title %}my purchases{% endblock %}
 
 {% block body %}
-    {% include 'components/navbar/index.html.twig' %}
+{#    {% include 'components/navbar/index.html.twig' %}#}
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -44,14 +44,16 @@
             <ul class="article-list">
                 {% for article in articles %}
                     <li class="article-item">
-                        <h3 class="article-title">{{ article.title }}</h3> 
+                        <h3 class="article-title">{{ article.title }}</h3>
                         <p class="article-price"> + {{ article.ttc }} €</p>
                     </li>
                 {% endfor %}
-            </ul>                      
+            </ul>
+            <a href="{{ path('sell_article_pdf') }}">Download PDF</a>
         {% else %}
             <p>Tu n'a rien à vendu.</p>
+            <a href="{{ path('sell_article_pdf') }}">Download PDF</a>
+            <a href="{{ path('catalog') }}">Catalogue</a>
         {% endif %}
     </div>
 {% endblock %}
-
